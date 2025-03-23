@@ -1,0 +1,33 @@
+[project]
+name = "kbchat"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "myeolinmalchi",email = "rkd2274@pusan.ac.kr"}
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi (>=0.115.11,<0.116.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "markdownify (>=1.1.0,<2.0.0)",
+    "beautifulsoup4 (>=4.13.3,<5.0.0)",
+    "requests (>=2.32.3,<3.0.0)",
+    "pgvector (>=0.4.0,<0.5.0)",
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "openai (>=1.66.3,<2.0.0)",
+    "sqlalchemy (>=2.0.39,<3.0.0)",
+    "webdriver-manager (>=4.0.2,<5.0.0)",
+    "selenium (>=4.29.0,<5.0.0)",
+    "alembic (>=1.15.1,<2.0.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)"
+]
+packages = [{ include = "**/*" }]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+yapf = "^0.43.0"
+
