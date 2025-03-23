@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-
   db:
     image: pgvector/pgvector:pg17
     ports:
@@ -26,3 +25,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  web:
+    build: ./frontend
+    image: kbchat-web:latest
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - api
