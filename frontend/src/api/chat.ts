@@ -1,7 +1,8 @@
+import { chatMock } from '@/mock/mock';
 import axios from 'axios';
 
 export interface ChatMessage {
-  role: 'user' | 'assistant';
+  role: 'user' | 'assistant' | string;
   content: string;
 }
 
@@ -18,20 +19,20 @@ export interface ChatUsage {
   total_tokens: number;
 }
 
-export interface ChatResponse {
-  uuid: string;
+export interface ChatResponse extends ChatRequest {
   title: string;
   answer: string;
-  question: string;
-  messages: ChatMessage[];
   usage: ChatUsage;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const devMode = import.meta.env.DEV;
 
 export const sendChatMessage = async (
   data: ChatRequest
 ): Promise<ChatResponse> => {
+  if (devMode) return chatMock;
+
   const response = await axios.post<ChatResponse>(
     `${API_BASE_URL}/api/chat`,
     data
