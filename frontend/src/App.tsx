@@ -7,6 +7,7 @@ import newChat from '@/assets/new-chat.svg';
 import sendIcon from '@/assets/send-icon.svg';
 import sidebarClose from '@/assets/sidebar-close.svg';
 import sidebarOpen from '@/assets/sidebar-open.svg';
+import stopIcon from '@/assets/stop-icon.svg';
 
 import { getChatHistory, saveChatToLocal } from './utils/localStorage';
 
@@ -60,6 +61,12 @@ export default function App() {
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
     }
+  };
+
+  const handleStop = () => {
+    // TODO: 타이핑 중단, 상태 초기화 등 처리
+    setIsStreaming(false);
+    // TODO: 추가로 타이핑 인터벌 클리어할 수 있다면 그것도 처리
   };
 
   useEffect(() => {
@@ -196,11 +203,14 @@ export default function App() {
             />
 
             <button
-              onClick={sendMessage}
+              onClick={isStreaming ? handleStop : sendMessage}
               className="absolute bottom-5 right-4 items-center justify-center"
               disabled={isStreaming}
             >
-              <img src={sendIcon} alt="전송 버튼" />
+              <img
+                src={isStreaming ? stopIcon : sendIcon}
+                alt={isStreaming ? '중단' : '전송'} // TODO:
+              />
             </button>
           </div>
         </div>
