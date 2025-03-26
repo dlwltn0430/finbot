@@ -7,6 +7,8 @@ import arrow from '@/assets/input.svg';
 import logo from '@/assets/logo.svg';
 import sideBar from '@/assets/sideBar.svg';
 
+// import { saveChatToLocal } from './utils/localStorage';
+
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [messages, setMessages] = useState([{ type: 'bot', text: '' }]); // TODO:
@@ -67,10 +69,21 @@ export default function App() {
           type: 'bot',
           text: streamedText,
         };
+
+        // ✅ 이 안에서 저장 (질문 + 답변)
+        // const title = newMessages.find((m) => m.type === 'user')?.text || '새로운 대화';
+        // saveChatToLocal({ title, messages: newMessages });
+
         return newMessages;
       });
     }
-  }, [isStreaming]); // TODO: warning
+  }, [isStreaming, streamedText]);
+
+  const startNewChat = () => {
+    setMessages([{ type: 'bot', text: '무엇을 도와드릴까요?' }]);
+    setStreamedText('');
+    setInput('');
+  };
 
   return (
     <div className="flex h-screen bg-white">
@@ -92,7 +105,12 @@ export default function App() {
               <img src={sideBar} alt="사이드바 버튼" />
             </button>
 
-            <img src={add} alt="새로운 대화 시작하기" />
+            <img
+              src={add}
+              alt="새로운 대화 시작하기"
+              onClick={startNewChat}
+              // className="cursor-pointer"
+            />
           </div>
         </div>
 
