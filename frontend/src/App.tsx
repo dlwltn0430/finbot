@@ -7,7 +7,7 @@ import arrow from '@/assets/input.svg';
 import logo from '@/assets/logo.svg';
 import sideBar from '@/assets/sideBar.svg';
 
-import { saveChatToLocal } from './utils/localStorage';
+import { getChatHistory, saveChatToLocal } from './utils/localStorage';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -95,6 +95,16 @@ export default function App() {
     setInput('');
   };
 
+  const [chatHistory, setChatHistory] = useState<
+    { title: string; messages: { type: string; text: string }[] }[]
+  >([]);
+
+  // 대화 목록 불러오기
+  useEffect(() => {
+    const history = getChatHistory();
+    setChatHistory(history);
+  }, []);
+
   return (
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
@@ -128,32 +138,19 @@ export default function App() {
           className={`flex-1 overflow-auto pl-7 pr-10 ${isSidebarOpen ? 'block' : 'hidden'}`}
         >
           <h2 className="mb-3 text-xs font-semibold text-[#7C7266]">오늘</h2>
-          {Array(5)
-            .fill('디폴트는 내용 요약되어 들어감')
-            .map((msg, i) => (
+          {chatHistory.length === 0 ? (
+            <p className="text-sm text-[#7C7266]">저장된 대화가 없습니다.</p>
+          ) : (
+            chatHistory.map((chat, i) => (
               <p
                 key={i}
                 className="truncate px-3 py-2 font-normal text-[#1B1B1B]"
+                // title={chat.title}
               >
-                {msg}
+                {chat.title}
               </p>
-            ))}
-          <h2
-            className="mb-3 mt-7 text-xs font-semibold text-[#7C7266]"
-            text-xs
-          >
-            어제
-          </h2>
-          {Array(5)
-            .fill('디폴트는 내용 요약되어 들어감')
-            .map((msg, i) => (
-              <p
-                key={i}
-                className="truncate px-3 py-2 font-normal text-[#1B1B1B]"
-              >
-                {msg}
-              </p>
-            ))}
+            ))
+          )}
         </div>
       </div>
 
