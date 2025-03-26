@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { sendChatMessage } from '@/api/chat';
 
-import add from '@/assets/add.svg';
-import arrow from '@/assets/input.svg';
 import logo from '@/assets/logo.svg';
-import sideBar from '@/assets/sideBar.svg';
+import newChat from '@/assets/new-chat.svg';
+import sendIcon from '@/assets/send-icon.svg';
+import sidebarClose from '@/assets/sidebar-close.svg';
+import sidebarOpen from '@/assets/sidebar-open.svg';
 
 import { getChatHistory, saveChatToLocal } from './utils/localStorage';
 
@@ -122,11 +123,14 @@ export default function App() {
 
           <div className="flex items-center gap-2">
             <button onClick={toggleSidebar}>
-              <img src={sideBar} alt="사이드바 버튼" />
+              <img
+                src={isSidebarOpen ? sidebarOpen : sidebarClose}
+                alt="사이드바 버튼"
+              />
             </button>
 
             <img
-              src={add}
+              src={newChat}
               alt="새로운 대화 시작하기"
               onClick={startNewChat}
               // className="cursor-pointer"
@@ -196,7 +200,7 @@ export default function App() {
               className="absolute bottom-5 right-4 items-center justify-center"
               disabled={isStreaming}
             >
-              <img src={arrow} alt="전송 버튼" />
+              <img src={sendIcon} alt="전송 버튼" />
             </button>
           </div>
         </div>
