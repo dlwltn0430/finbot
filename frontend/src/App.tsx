@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { sendChatMessage } from '@/api/chat';
 
 import add from '@/assets/add.svg';
 import arrow from '@/assets/input.svg';
@@ -7,18 +9,68 @@ import sideBar from '@/assets/sideBar.svg';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState([
-    { type: 'bot', text: '무엇을 도와드릴까요?' },
-  ]);
+  const [messages, setMessages] = useState([{ type: 'bot', text: '' }]); // TODO:
   const [input, setInput] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedText, setStreamedText] = useState('');
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
-    setMessages([...messages, { type: 'user', text: input }]);
+
+    const userMessage = { type: 'user', text: input };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput('');
+    setIsStreaming(true);
+    setStreamedText('');
+
+    try {
+      const response = await sendChatMessage({
+        uuid: 'test', // TODO: 사용 안하는 값
+        question: input,
+        messages: updatedMessages.map((msg) => ({
+          role: msg.type === 'user' ? 'user' : 'assistant',
+          content: msg.text,
+        })),
+      });
+
+      // 하나 더 추가해서 보여줄 메시지 자리 확보
+      setMessages((prev) => [...prev, { type: 'bot', text: '' }]);
+
+      // 타이핑 효과
+      let index = 0;
+      const typingInterval = setInterval(() => {
+        setStreamedText(() => {
+          const next = response.answer.slice(0, index + 1);
+          index++;
+
+          if (index >= response.answer.length) {
+            clearInterval(typingInterval);
+            setIsStreaming(false);
+          }
+
+          return next;
+        });
+      }, 10);
+    } catch (error) {
+      console.error('챗봇 응답 실패:', error);
+    }
   };
+
+  useEffect(() => {
+    if (!isStreaming && streamedText) {
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = {
+          type: 'bot',
+          text: streamedText,
+        };
+        return newMessages;
+      });
+    }
+  }, [isStreaming]); // TODO: warning
 
   return (
     <div className="flex h-screen bg-white">
@@ -85,9 +137,25 @@ export default function App() {
           </h2>
         </div>
 
+        <div className="flex max-h-[60vh] flex-col overflow-y-auto px-20 py-6">
+          {messages.map((msg, i) => (
+            <div
+              key={i}
+              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${
+                msg.type === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'
+              }`}
+            >
+              {msg.text}
+              {i === messages.length - 1 && isStreaming && (
+                <span className="animate-pulse">|</span> // 커서 느낌
+              )}
+            </div>
+          ))}
+        </div>
+
         {/* 채팅 입력창 */}
         <div className="mt-9 flex items-center justify-center border-t">
-          <div className="relative w-full max-w-2xl">
+          <div className="relative w-full">
             {/* 입력창 */}
             <input
               type="text"
@@ -95,11 +163,13 @@ export default function App() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="궁금한 내용을 입력해주세요"
               className="placeholder-gray-[#C3C3C3] h-[160px] w-full rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+              disabled={isStreaming}
             />
 
             <button
               onClick={sendMessage}
               className="absolute bottom-5 right-4 items-center justify-center"
+              disabled={isStreaming}
             >
               <img src={arrow} alt="전송 버튼" />
             </button>
