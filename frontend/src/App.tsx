@@ -7,7 +7,7 @@ import arrow from '@/assets/input.svg';
 import logo from '@/assets/logo.svg';
 import sideBar from '@/assets/sideBar.svg';
 
-// import { saveChatToLocal } from './utils/localStorage';
+import { saveChatToLocal } from './utils/localStorage';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -64,17 +64,27 @@ export default function App() {
   useEffect(() => {
     if (!isStreaming && streamedText) {
       setMessages((prev) => {
-        const newMessages = [...prev];
-        newMessages[newMessages.length - 1] = {
+        // 1. 챗봇 메시지를 마지막에 반영
+        const updatedMessages = [...prev];
+        updatedMessages[updatedMessages.length - 1] = {
           type: 'bot',
           text: streamedText,
         };
 
-        // ✅ 이 안에서 저장 (질문 + 답변)
-        // const title = newMessages.find((m) => m.type === 'user')?.text || '새로운 대화';
-        // saveChatToLocal({ title, messages: newMessages });
+        // 2. 제목용 메시지
+        const title =
+          updatedMessages.find((m) => m.type === 'user')?.text || '새로운 대화';
 
-        return newMessages;
+        // 3. ChatMessage 타입에 맞게 변환해서 저장
+        const chatMessages = updatedMessages.map((msg) => ({
+          role: msg.type === 'user' ? 'user' : 'assistant',
+          content: msg.text,
+        }));
+
+        // 4. 저장
+        saveChatToLocal({ title, messages: chatMessages });
+
+        return updatedMessages;
       });
     }
   }, [isStreaming, streamedText]);
