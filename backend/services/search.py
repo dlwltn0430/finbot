@@ -69,7 +69,7 @@ class AppSearchService:
             {
                 "title": chunk.deposit.title,
                 "url": chunk.deposit.url,
-                "description": chunk.deposit,
+                "description": chunk.deposit.description,
                 "content": chunk.content,
                 "category": chunk.deposit.category.value, # type: ignore
             } for chunk in deposit_chunks
