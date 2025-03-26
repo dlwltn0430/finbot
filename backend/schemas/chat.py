@@ -24,7 +24,6 @@ KBChatMessage: TypeAlias = Union[
 
 
 class ChatRequest(BaseModel):
-    uuid: Optional[str] = None
     question: str
     messages: List[KBChatMessage] = []
 
