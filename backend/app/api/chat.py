@@ -16,11 +16,6 @@ client = AsyncOpenAI()
 assistant = init_assistant()
 
 
-@router.get("/health_check")
-def health_check():
-    return {"message": "good"}
-
-
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     title = None
