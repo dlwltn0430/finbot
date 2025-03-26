@@ -22,9 +22,7 @@ class Usage(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    uuid: str
     title: Optional[str] = None
     answer: str
     question: str
     messages: List[ChatCompletionMessageParam | ChatCompletionMessage] = []
-    usage: Usage
