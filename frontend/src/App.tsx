@@ -1,6 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { ChatMessage, sendChatMessage } from '@/api/chat';
+import {
+  ChatContent,
+  ChatMessage,
+  ChatResponse,
+  sendChatMessage,
+} from '@/api/chat';
 
 import logo from '@/assets/logo.svg';
 import newChat from '@/assets/new-chat.svg';
@@ -24,7 +29,10 @@ export default function App() {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const responseTitleRef = useRef('');
+  const [lastResponse, setLastResponse] = useState<ChatResponse | null>(null);
+  const [streamedTextContent, setStreamedTextContent] = useState<ChatContent[]>(
+    []
+  );
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -35,6 +43,8 @@ export default function App() {
     setInput('');
     setIsStreaming(true);
     setStreamedText('');
+    setStreamedTextContent([]);
+    setLastResponse(null);
 
     try {
       const response = await sendChatMessage({
@@ -43,29 +53,28 @@ export default function App() {
         messages: updatedMessages,
       });
 
-      responseTitleRef.current = response.title; // title 저장
+      setLastResponse(response); // ✅ 저장
+      setStreamedTextContent(response.answer); // ✅ 저장
 
-      // 하나 더 추가해서 보여줄 메시지 자리 확보
-      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
-
+      // streaming UI용 문자열 추출
       // 타이핑 효과
       let index = 0;
       const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
       const typingInterval = setInterval(() => {
-        setStreamedText(() => {
-          const next = fullText.slice(0, index + 1);
-          index++;
-          if (index >= fullText.length) {
-            clearInterval(typingInterval);
-            setIsStreaming(false);
-          }
-          return next;
-        });
+        setStreamedText(fullText.slice(0, ++index));
+        if (index >= fullText.length) {
+          clearInterval(typingInterval);
+          setIsStreaming(false);
+        }
       }, 10);
+
+      // 미리 placeholder 메시지 추가
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
     }
   };
+
   const handleStop = () => {
     // TODO: 타이핑 중단, 상태 초기화 등 처리
     setIsStreaming(false);
@@ -77,22 +86,30 @@ export default function App() {
       setMessages((prev) => {
         // 1. 챗봇 메시지를 마지막에 반영
         const updatedMessages = [...prev];
-        updatedMessages[updatedMessages.length - 1] = {
-          role: 'assistant',
-          content: streamedText,
+
+        // ✅ 응답에서 온 구조 사용
+        const lastBotMessage = {
+          role: 'assistant' as const,
+          content: streamedTextContent,
         };
 
+        updatedMessages[updatedMessages.length - 1] = lastBotMessage;
+
         // 2. 제목용 메시지
-        const title = responseTitleRef.current || '새로운 대화';
+        const title = lastResponse?.title || '새로운 대화';
 
         // 4. 저장
-        saveChatToLocal({ title, messages: updatedMessages });
+        saveChatToLocal({
+          title,
+          messages: updatedMessages,
+        });
+
         setChatHistory(getChatHistory());
 
         return updatedMessages;
       });
     }
-  }, [isStreaming, streamedText]);
+  }, [isStreaming, streamedText, streamedTextContent, lastResponse]);
 
   const startNewChat = () => {
     setMessages([]);
@@ -105,6 +122,9 @@ export default function App() {
     const history = getChatHistory();
     setChatHistory(history);
   }, []);
+
+  // TODO: 삭제
+  console.log(messages);
 
   return (
     <div className="flex h-screen bg-white">
