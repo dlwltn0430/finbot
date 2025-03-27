@@ -13,10 +13,15 @@ import { getChatHistory, saveChatToLocal } from './utils/localStorage';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState([{ type: 'bot', text: '' }]); // TODO:
+  const [messages, setMessages] = useState<{ type: string; text: string }[]>([
+    { type: 'bot', text: '' },
+  ]); // TODO:
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState('');
+  const [chatHistory, setChatHistory] = useState<
+    { title: string; messages: { type: string; text: string }[] }[]
+  >([]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -45,16 +50,18 @@ export default function App() {
 
       // 타이핑 효과
       let index = 0;
+      const fullText = response.answer
+        .map((item) => item.paragraph)
+        .join('\n\n');
+
       const typingInterval = setInterval(() => {
         setStreamedText(() => {
-          const next = response.answer.slice(0, index + 1);
+          const next = fullText.slice(0, index + 1);
           index++;
-
-          if (index >= response.answer.length) {
+          if (index >= fullText.length) {
             clearInterval(typingInterval);
             setIsStreaming(false);
           }
-
           return next;
         });
       }, 10);
@@ -91,6 +98,7 @@ export default function App() {
 
         // 4. 저장
         saveChatToLocal({ title, messages: chatMessages });
+        setChatHistory(getChatHistory());
 
         return updatedMessages;
       });
@@ -103,10 +111,6 @@ export default function App() {
     setInput('');
   };
 
-  const [chatHistory, setChatHistory] = useState<
-    { title: string; messages: { type: string; text: string }[] }[]
-  >([]);
-
   // 대화 목록 불러오기
   useEffect(() => {
     const history = getChatHistory();
@@ -117,7 +121,7 @@ export default function App() {
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
       <div
-        className={`flex w-80 flex-col justify-center transition-all duration-300 ${isSidebarOpen ? 'h-screen bg-[#EAE6E3]' : 'ml-7 mt-8 h-[60px] rounded-xl bg-white px-3 py-4 shadow-[0px_0px_4px_0px_rgba(99,99,99,0.24)]'} `}
+        className={`flex w-80 flex-col justify-center transition-all duration-300 ${isSidebarOpen ? 'h-screen bg-[#EAE6E3]' : 'ml-7 mt-8 h-[60px] rounded-xl bg-white px-3 py-4 shadow-[0px_0px_4px_0px_rgba(99,99,99,0.24)]'}`}
       >
         <div
           className={`flex items-center justify-between ${isSidebarOpen ? 'py-10 pl-7 pr-10' : ''}`}
@@ -125,7 +129,7 @@ export default function App() {
           <img
             src={logo}
             alt="KB 국민은행"
-            className={`w-auto transition-opacity duration-300`}
+            className="w-auto transition-opacity duration-300"
           />
 
           <div className="flex items-center gap-2">
@@ -135,12 +139,11 @@ export default function App() {
                 alt="사이드바 버튼"
               />
             </button>
-
             <img
               src={newChat}
               alt="새로운 대화 시작하기"
               onClick={startNewChat}
-              // className="cursor-pointer"
+              className="cursor-pointer"
             />
           </div>
         </div>
@@ -155,8 +158,8 @@ export default function App() {
             chatHistory.map((chat, i) => (
               <p
                 key={i}
-                className="truncate px-3 py-2 font-normal text-[#1B1B1B]"
-                // title={chat.title}
+                className="cursor-pointer truncate px-3 py-2 font-normal text-[#1B1B1B]"
+                onClick={() => setMessages(chat.messages)}
               >
                 {chat.title}
               </p>
@@ -177,9 +180,7 @@ export default function App() {
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${
-                msg.type === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'
-              }`}
+              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${msg.type === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'}`}
             >
               {msg.text}
               {i === messages.length - 1 && isStreaming && (
