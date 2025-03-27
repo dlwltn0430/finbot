@@ -3,7 +3,12 @@ import axios from 'axios';
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | string;
-  content: string;
+  content: string | ChatContent[];
+}
+
+export interface ChatContent {
+  paragraph: string;
+  urls: string[];
 }
 
 export interface ChatRequest {
@@ -12,17 +17,11 @@ export interface ChatRequest {
   messages: ChatMessage[];
 }
 
-export interface ChatUsage {
-  prompt_tokens: number;
-  completion_tokens: number;
-  cached_prompt_tokens: number;
-  total_tokens: number;
-}
-
-export interface ChatResponse extends ChatRequest {
+export interface ChatResponse {
   title: string;
-  answer: string;
-  usage: ChatUsage;
+  question: string;
+  answer: ChatContent[];
+  messages: ChatMessage[];
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
