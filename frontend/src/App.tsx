@@ -9,6 +9,7 @@ import sidebarClose from '@/assets/sidebar-close.svg';
 import sidebarOpen from '@/assets/sidebar-open.svg';
 import stopIcon from '@/assets/stop-icon.svg';
 
+import { MessageRenderer } from './components/MessageRenderer';
 import { getChatHistory, saveChatToLocal } from './utils/localStorage';
 
 export default function App() {
@@ -170,7 +171,12 @@ export default function App() {
               key={i}
               className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${msg.role === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'}`}
             >
-              {/* TODO: */}
+              {Array.isArray(msg.content) ? (
+                <MessageRenderer blocks={msg.content} />
+              ) : (
+                msg.content
+              )}
+
               {i === messages.length - 1 && isStreaming && (
                 <span className="animate-pulse">|</span> // 커서 느낌
               )}
