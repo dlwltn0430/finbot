@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { sendChatMessage } from '@/api/chat';
+import { ChatMessage, sendChatMessage } from '@/api/chat';
 
 import logo from '@/assets/logo.svg';
 import newChat from '@/assets/new-chat.svg';
@@ -13,22 +13,22 @@ import { getChatHistory, saveChatToLocal } from './utils/localStorage';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState<{ type: string; text: string }[]>([
-    { type: 'bot', text: '' },
-  ]); // TODO:
+  const [messages, setMessages] = useState<ChatMessage[]>([]); // TODO:
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState('');
   const [chatHistory, setChatHistory] = useState<
-    { title: string; messages: { type: string; text: string }[] }[]
+    { title: string; messages: ChatMessage[] }[]
   >([]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  const responseTitleRef = useRef('');
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { type: 'user', text: input };
+    const userMessage = { role: 'user', content: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput('');
@@ -39,21 +39,17 @@ export default function App() {
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
         question: input,
-        messages: updatedMessages.map((msg) => ({
-          role: msg.type === 'user' ? 'user' : 'assistant',
-          content: msg.text,
-        })),
+        messages: updatedMessages,
       });
 
+      responseTitleRef.current = response.title; // title 저장
+
       // 하나 더 추가해서 보여줄 메시지 자리 확보
-      setMessages((prev) => [...prev, { type: 'bot', text: '' }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
       // 타이핑 효과
       let index = 0;
-      const fullText = response.answer
-        .map((item) => item.paragraph)
-        .join('\n\n');
-
+      const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
       const typingInterval = setInterval(() => {
         setStreamedText(() => {
           const next = fullText.slice(0, index + 1);
@@ -69,7 +65,6 @@ export default function App() {
       console.error('챗봇 응답 실패:', error);
     }
   };
-
   const handleStop = () => {
     // TODO: 타이핑 중단, 상태 초기화 등 처리
     setIsStreaming(false);
@@ -82,22 +77,15 @@ export default function App() {
         // 1. 챗봇 메시지를 마지막에 반영
         const updatedMessages = [...prev];
         updatedMessages[updatedMessages.length - 1] = {
-          type: 'bot',
-          text: streamedText,
+          role: 'assistant',
+          content: streamedText,
         };
 
         // 2. 제목용 메시지
-        const title =
-          updatedMessages.find((m) => m.type === 'user')?.text || '새로운 대화';
-
-        // 3. ChatMessage 타입에 맞게 변환해서 저장
-        const chatMessages = updatedMessages.map((msg) => ({
-          role: msg.type === 'user' ? 'user' : 'assistant',
-          content: msg.text,
-        }));
+        const title = responseTitleRef.current || '새로운 대화';
 
         // 4. 저장
-        saveChatToLocal({ title, messages: chatMessages });
+        saveChatToLocal({ title, messages: updatedMessages });
         setChatHistory(getChatHistory());
 
         return updatedMessages;
@@ -106,7 +94,7 @@ export default function App() {
   }, [isStreaming, streamedText]);
 
   const startNewChat = () => {
-    setMessages([{ type: 'bot', text: '무엇을 도와드릴까요?' }]);
+    setMessages([]);
     setStreamedText('');
     setInput('');
   };
@@ -180,9 +168,9 @@ export default function App() {
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${msg.type === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'}`}
+              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${msg.role === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'}`}
             >
-              {msg.text}
+              {/* TODO: */}
               {i === messages.length - 1 && isStreaming && (
                 <span className="animate-pulse">|</span> // 커서 느낌
               )}
