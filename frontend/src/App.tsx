@@ -208,12 +208,25 @@ export default function App() {
         <div className="mt-9 flex items-center justify-center border-t">
           <div className="relative w-full">
             {/* 입력창 */}
-            <input
-              type="text"
+            <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if (e.shiftKey) {
+                    // Shift + Enter: 기본 개행 동작 유지
+                    return;
+                  } else {
+                    // Enter 단독: 메시지 전송
+                    e.preventDefault();
+                    if (!isStreaming && input.trim()) {
+                      sendMessage();
+                    }
+                  }
+                }
+              }}
               placeholder="궁금한 내용을 입력해주세요"
-              className="placeholder-gray-[#C3C3C3] h-[160px] w-full rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+              className="placeholder-gray-[#C3C3C3] h-[160px] w-full resize-none rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
               disabled={isStreaming}
             />
 
