@@ -24,18 +24,19 @@ export default function App() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState('');
   const [chatHistory, setChatHistory] = useState<
-    { title: string; messages: ChatMessage[] }[]
+    { id: string; title: string; messages: ChatMessage[] }[]
   >([]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [lastResponse, setLastResponse] = useState<ChatResponse | null>(null);
   const [streamedTextContent, setStreamedTextContent] = useState<ChatContent[]>(
     []
   );
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !currentChatId) return;
 
     const userMessage = { role: 'user', content: input };
     const updatedMessages = [...messages, userMessage];
@@ -94,7 +95,7 @@ export default function App() {
   }, [input]);
 
   useEffect(() => {
-    if (!isStreaming && streamedText) {
+    if (!isStreaming && streamedText && currentChatId) {
       setMessages((prev) => {
         // 1. 챗봇 메시지를 마지막에 반영
         const updatedMessages = [...prev];
@@ -111,22 +112,40 @@ export default function App() {
         const title = lastResponse?.title || '새로운 대화';
 
         // 4. 저장
-        saveChatToLocal({
-          title,
-          messages: updatedMessages,
-        });
+        saveChatToLocal(currentChatId, { title, messages: updatedMessages });
 
         setChatHistory(getChatHistory());
 
         return updatedMessages;
       });
     }
-  }, [isStreaming, streamedText, streamedTextContent, lastResponse]);
+  }, [
+    isStreaming,
+    streamedText,
+    streamedTextContent,
+    lastResponse,
+    currentChatId,
+  ]);
+
+  useEffect(() => {
+    if (!currentChatId) {
+      startNewChat();
+    }
+  }, [currentChatId]);
 
   const startNewChat = () => {
+    const newChatId = crypto.randomUUID();
+    setCurrentChatId(newChatId);
     setMessages([]);
     setStreamedText('');
     setInput('');
+
+    const history = getChatHistory();
+    localStorage.setItem(
+      'chatHistory',
+      JSON.stringify([...history, { id: newChatId, title: '', messages: [] }])
+    );
+    setChatHistory(getChatHistory());
   };
 
   // 대화 목록 불러오기
@@ -188,9 +207,12 @@ export default function App() {
               <p
                 key={i}
                 className="cursor-pointer truncate px-3 py-2 font-normal text-[#1B1B1B]"
-                onClick={() => setMessages(chat.messages)}
+                onClick={() => {
+                  setCurrentChatId(chat.id);
+                  setMessages(chat.messages);
+                }}
               >
-                {chat.title}
+                {chat.title || '새로운 대화'} {/*TODO: */}
               </p>
             ))
           )}
