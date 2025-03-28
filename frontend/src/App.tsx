@@ -9,9 +9,11 @@ import {
 
 import logo from '@/assets/logo.svg';
 import newChat from '@/assets/new-chat.svg';
+import sendIconHover from '@/assets/send-icon-hover.svg';
 import sendIcon from '@/assets/send-icon.svg';
 import sidebarClose from '@/assets/sidebar-close.svg';
 import sidebarOpen from '@/assets/sidebar-open.svg';
+import stopIconHover from '@/assets/stop-icon-hover.svg';
 import stopIcon from '@/assets/stop-icon.svg';
 
 import { MessageRenderer } from './components/MessageRenderer';
@@ -187,6 +189,8 @@ export default function App() {
     }
   }, [messages, streamedText]); // 메시지가 생기거나 streamedText 업데이트 될 때마다 스크롤
 
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
@@ -298,12 +302,21 @@ export default function App() {
 
             <button
               onClick={isStreaming ? cancelStreamingResponse : sendMessage}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               className="absolute bottom-5 right-4 items-center justify-center"
-              // disabled={isStreaming}
             >
               <img
-                src={isStreaming ? stopIcon : sendIcon}
-                alt={isStreaming ? '중단' : '전송'} // TODO:
+                src={
+                  isStreaming
+                    ? isHovered
+                      ? stopIconHover
+                      : stopIcon
+                    : isHovered
+                      ? sendIconHover
+                      : sendIcon
+                }
+                alt={isStreaming ? '중단' : '전송'}
               />
             </button>
           </div>
