@@ -8,6 +8,7 @@ import {
 } from '@/api/chat';
 
 import logo from '@/assets/logo.svg';
+import newChatHover from '@/assets/new-chat-hover.svg';
 import newChat from '@/assets/new-chat.svg';
 import sendIconHover from '@/assets/send-icon-hover.svg';
 import sendIcon from '@/assets/send-icon.svg';
@@ -189,7 +190,9 @@ export default function App() {
     }
   }, [messages, streamedText]); // 메시지가 생기거나 streamedText 업데이트 될 때마다 스크롤
 
-  const [isHovered, setIsHovered] = useState(false);
+  // 호버 효과
+  const [isSendOrStopHovered, setIsSendOrStopHovered] = useState(false);
+  const [isNewChatHovered, setIsNewChatHovered] = useState(false);
 
   return (
     <div className="flex h-screen bg-white">
@@ -214,9 +217,11 @@ export default function App() {
               />
             </button>
             <img
-              src={newChat}
+              src={isNewChatHovered ? newChatHover : newChat}
               alt="새로운 대화 시작하기"
               onClick={startNewChat}
+              onMouseEnter={() => setIsNewChatHovered(true)}
+              onMouseLeave={() => setIsNewChatHovered(false)}
               className="cursor-pointer"
             />
           </div>
@@ -302,17 +307,17 @@ export default function App() {
 
             <button
               onClick={isStreaming ? cancelStreamingResponse : sendMessage}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              onMouseEnter={() => setIsSendOrStopHovered(true)}
+              onMouseLeave={() => setIsSendOrStopHovered(false)}
               className="absolute bottom-5 right-4 items-center justify-center"
             >
               <img
                 src={
                   isStreaming
-                    ? isHovered
+                    ? isSendOrStopHovered
                       ? stopIconHover
                       : stopIcon
-                    : isHovered
+                    : isSendOrStopHovered
                       ? sendIconHover
                       : sendIcon
                 }
