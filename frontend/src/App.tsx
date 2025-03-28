@@ -34,6 +34,7 @@ export default function App() {
   const [streamedTextContent, setStreamedTextContent] = useState<ChatContent[]>(
     []
   );
+  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const sendMessage = async () => {
     if (!input.trim() || !currentChatId) return;
@@ -48,10 +49,13 @@ export default function App() {
     setLastResponse(null);
 
     try {
+      // TODO: 삭제
+      // console.log(input);
+
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
         question: input,
-        messages: updatedMessages,
+        messages: [], // TODO: 이것도 사용 안하는 값?
       });
 
       setLastResponse(response); // ✅ 저장
@@ -61,10 +65,12 @@ export default function App() {
       // 타이핑 효과
       let index = 0;
       const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
-      const typingInterval = setInterval(() => {
+
+      typingIntervalRef.current = setInterval(() => {
         setStreamedText(fullText.slice(0, ++index));
         if (index >= fullText.length) {
-          clearInterval(typingInterval);
+          clearInterval(typingIntervalRef.current!);
+          typingIntervalRef.current = null;
           setIsStreaming(false);
         }
       }, 10);
@@ -76,10 +82,26 @@ export default function App() {
     }
   };
 
-  const handleStop = () => {
-    // TODO: 타이핑 중단, 상태 초기화 등 처리
+  const cancelStreamingResponse = () => {
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+    }
+
     setIsStreaming(false);
-    // TODO: 추가로 타이핑 인터벌 클리어할 수 있다면 그것도 처리
+
+    // 마지막 bot 메시지를 즉시 완성된 메시지로 치환
+    setMessages((prev) => {
+      const updated = [...prev];
+
+      const completedBotMessage = {
+        role: 'assistant' as const,
+        content: streamedTextContent, // 전체 답변 block 형태
+      };
+
+      updated[updated.length - 1] = completedBotMessage;
+      return updated;
+    });
   };
 
   // 입력창 특정 px 전까지는 height 계속 늘어나다가 이후부터는 y축 스크롤
@@ -155,7 +177,7 @@ export default function App() {
   }, []);
 
   // TODO: 삭제
-  console.log(messages);
+  // console.log(messages);
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -262,6 +284,8 @@ export default function App() {
                 if (e.key === 'Enter') {
                   if (e.shiftKey) return; // 줄바꿈 허용
                   e.preventDefault();
+                  if (isStreaming) return;
+
                   if (!isStreaming && input.trim()) {
                     sendMessage();
                   }
@@ -273,9 +297,9 @@ export default function App() {
             />
 
             <button
-              onClick={isStreaming ? handleStop : sendMessage}
+              onClick={isStreaming ? cancelStreamingResponse : sendMessage}
               className="absolute bottom-5 right-4 items-center justify-center"
-              disabled={isStreaming}
+              // disabled={isStreaming}
             >
               <img
                 src={isStreaming ? stopIcon : sendIcon}
