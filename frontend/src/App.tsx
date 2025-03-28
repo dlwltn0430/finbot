@@ -199,11 +199,13 @@ export default function App() {
 
       {/* 메인 채팅 영역 */}
       <div className="flex flex-1 flex-col justify-center">
-        <div className="flex flex-col items-center justify-center">
-          <h2 className="text-3xl font-semibold text-[#7C7266]">
-            무엇을 도와드릴까요?
-          </h2>
-        </div>
+        {messages.length === 0 && (
+          <div className="flex flex-col items-center justify-center">
+            <h2 className="text-3xl font-semibold text-[#7C7266]">
+              무엇을 도와드릴까요?
+            </h2>
+          </div>
+        )}
 
         <div className="flex max-h-[60vh] flex-col overflow-y-auto px-20 py-6">
           {messages.map((msg, i) => (
