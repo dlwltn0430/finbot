@@ -14,6 +14,6 @@ RUN \
       poetry config virtualenvs.create false && \
       poetry install --no-root --without dev
 
-EXPOSE 8000
+EXPOSE 8088
 
 CMD ["/app/run.sh"]
