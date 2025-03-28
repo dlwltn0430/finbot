@@ -1,3 +1,5 @@
+import ReactMarkdown from 'react-markdown';
+
 import { ChatContent } from '@/api/chat';
 
 import linkIcon from '@/assets/link-icon.svg';
@@ -15,9 +17,27 @@ export const MessageRenderer = ({ blocks }: MessageRendererProps) => {
           key={i}
           className="font-[Pretendard] font-[500] leading-[28px] text-[#1B1B1B]"
         >
-          <p className="mb-2 whitespace-pre-wrap">{block.paragraph}</p>
+          <ReactMarkdown
+            components={{
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-10 text-[#7C7266] underline"
+                >
+                  {children}
+                </a>
+              ),
+              p: ({ children }) => (
+                <p className="mb-2 whitespace-pre-wrap">{children}</p>
+              ),
+            }}
+          >
+            {block.paragraph}
+          </ReactMarkdown>
 
-          {block.urls.map((url, j) => (
+          {block.urls?.map((url, j) => (
             <a
               key={j}
               href={url.startsWith('http') ? url : `https://${url}`}
