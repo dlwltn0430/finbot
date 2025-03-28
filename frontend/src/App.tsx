@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   ChatContent,
@@ -80,6 +80,18 @@ export default function App() {
     setIsStreaming(false);
     // TODO: 추가로 타이핑 인터벌 클리어할 수 있다면 그것도 처리
   };
+
+  // 입력창 특정 px 전까지는 height 계속 늘어나다가 이후부터는 y축 스크롤
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // height 자동 조절
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 220)}px`; // 자동 높이 + 최대 높이 220px로 제한
+    }
+  }, [input]);
 
   useEffect(() => {
     if (!isStreaming && streamedText) {
@@ -209,24 +221,20 @@ export default function App() {
           <div className="relative w-full">
             {/* 입력창 */}
             <textarea
+              ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  if (e.shiftKey) {
-                    // Shift + Enter: 기본 개행 동작 유지
-                    return;
-                  } else {
-                    // Enter 단독: 메시지 전송
-                    e.preventDefault();
-                    if (!isStreaming && input.trim()) {
-                      sendMessage();
-                    }
+                  if (e.shiftKey) return; // 줄바꿈 허용
+                  e.preventDefault();
+                  if (!isStreaming && input.trim()) {
+                    sendMessage();
                   }
                 }
               }}
               placeholder="궁금한 내용을 입력해주세요"
-              className="placeholder-gray-[#C3C3C3] h-[160px] w-full resize-none rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+              className="placeholder-gray-[#C3C3C3] max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
               disabled={isStreaming}
             />
 
