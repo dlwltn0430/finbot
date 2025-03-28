@@ -138,6 +138,14 @@ export default function App() {
   // TODO: 삭제
   console.log(messages);
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, streamedText]); // 메시지가 생기거나 streamedText 업데이트 될 때마다 스크롤
+
   return (
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
@@ -214,6 +222,8 @@ export default function App() {
               )}
             </div>
           ))}
+
+          <div ref={bottomRef} />
         </div>
 
         {/* 채팅 입력창 */}
