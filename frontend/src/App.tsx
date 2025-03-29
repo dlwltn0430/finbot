@@ -51,10 +51,19 @@ export default function App() {
     setStreamedTextContent([]);
     setLastResponse(null);
 
-    try {
-      // TODO: 삭제
-      // console.log(input);
+    // 새 채팅방일 경우에만 저장
+    if (chatHistory.every((chat) => chat.id !== currentChatId)) {
+      const newChat = {
+        id: currentChatId,
+        title: '',
+        messages: updatedMessages,
+      };
+      const updatedHistory = [...chatHistory, newChat];
+      localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
+      setChatHistory(updatedHistory);
+    }
 
+    try {
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
         question: input,
@@ -169,13 +178,6 @@ export default function App() {
     setMessages([]);
     setStreamedText('');
     setInput('');
-
-    const history = getChatHistory();
-    localStorage.setItem(
-      'chatHistory',
-      JSON.stringify([...history, { id: newChatId, title: '', messages: [] }])
-    );
-    setChatHistory(getChatHistory());
   };
 
   // 대화 목록 불러오기
