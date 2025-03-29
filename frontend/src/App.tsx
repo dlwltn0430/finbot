@@ -27,7 +27,7 @@ export default function App() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState('');
   const [chatHistory, setChatHistory] = useState<
-    { id: string; title: string; messages: ChatMessage[] }[]
+    { id: string; title: string; messages: ChatMessage[]; createdAt: string }[]
   >([]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -57,8 +57,9 @@ export default function App() {
         id: currentChatId,
         title: '',
         messages: updatedMessages,
+        createdAt: new Date().toISOString(),
       };
-      const updatedHistory = [...chatHistory, newChat];
+      const updatedHistory = [newChat, ...chatHistory]; // 최근 대화를 최상단으로
       localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
       setChatHistory(updatedHistory);
     }
@@ -201,6 +202,33 @@ export default function App() {
   const [isSendOrStopHovered, setIsSendOrStopHovered] = useState(false);
   const [isNewChatHovered, setIsNewChatHovered] = useState(false);
 
+  // 날짜 -> 오늘, 어제, 최근, 이전 대화
+  const formatDateLabel = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(today.getDate() - 7);
+
+    if (date.toDateString() === today.toDateString()) return '오늘';
+    if (date.toDateString() === yesterday.toDateString()) return '어제';
+    if (date > oneWeekAgo) return '최근';
+    return '이전 대화';
+  };
+
+  const groupChatsByDate = (chats: typeof chatHistory) =>
+    chats.reduce(
+      (acc, chat) => {
+        const label = formatDateLabel(chat.createdAt);
+        if (!acc[label]) acc[label] = [];
+        acc[label].push(chat);
+        return acc;
+      },
+      {} as Record<string, typeof chatHistory>
+    );
+
   return (
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
@@ -233,24 +261,33 @@ export default function App() {
 
           {/* 채팅 목록 */}
           <div className="flex-1 overflow-auto pl-7 pr-10">
-            <h2 className="mb-3 text-xs font-semibold text-[#7C7266]">오늘</h2>
             {chatHistory.length === 0 ? (
               <p className="text-sm text-[#7C7266]">
                 새로운 대화를 시작해보세요.
               </p>
             ) : (
-              chatHistory.map((chat, i) => (
-                <p
-                  key={i}
-                  className="cursor-pointer truncate rounded-[8px] px-3 py-2 font-normal text-[#1B1B1B] hover:bg-[#D4CCC5]"
-                  onClick={() => {
-                    setCurrentChatId(chat.id);
-                    setMessages(chat.messages);
-                  }}
-                >
-                  {chat.title || '새로운 대화'} {/*TODO: */}
-                </p>
-              ))
+              Object.entries(groupChatsByDate([...chatHistory].reverse())).map(
+                ([label, chats]) =>
+                  chats.length > 0 && (
+                    <div key={label} className="mb-6">
+                      <h2 className="mb-3 text-xs font-semibold text-[#7C7266]">
+                        {label}
+                      </h2>
+                      {chats.map((chat) => (
+                        <p
+                          key={chat.id}
+                          className="cursor-pointer truncate rounded-[8px] px-3 py-2 font-normal text-[#1B1B1B] hover:bg-[#D4CCC5]"
+                          onClick={() => {
+                            setCurrentChatId(chat.id);
+                            setMessages(chat.messages);
+                          }}
+                        >
+                          {chat.title || '새로운 대화'}
+                        </p>
+                      ))}
+                    </div>
+                  )
+              )
             )}
           </div>
         </div>
