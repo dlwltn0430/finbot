@@ -228,12 +228,14 @@ export default function App() {
           <div className="flex-1 overflow-auto pl-7 pr-10">
             <h2 className="mb-3 text-xs font-semibold text-[#7C7266]">오늘</h2>
             {chatHistory.length === 0 ? (
-              <p className="text-sm text-[#7C7266]">저장된 대화가 없습니다.</p>
+              <p className="text-sm text-[#7C7266]">
+                새로운 대화를 시작해보세요.
+              </p>
             ) : (
               chatHistory.map((chat, i) => (
                 <p
                   key={i}
-                  className="cursor-pointer truncate px-3 py-2 font-normal text-[#1B1B1B]"
+                  className="cursor-pointer truncate rounded-[8px] px-3 py-2 font-normal text-[#1B1B1B] hover:bg-[#D4CCC5]"
                   onClick={() => {
                     setCurrentChatId(chat.id);
                     setMessages(chat.messages);
