@@ -315,7 +315,9 @@ export default function App() {
       {/* 메인 채팅 영역 */}
       <div
         className={`ml-80 flex h-screen flex-1 flex-col items-center px-20 ${
-          messages.length === 0 ? 'justify-center' : 'relative py-[100px]'
+          messages.length === 0
+            ? 'justify-center'
+            : 'relative pb-[200px] pt-[100px]'
         }`}
       >
         {messages.length === 0 && (
@@ -339,11 +341,15 @@ export default function App() {
               {Array.isArray(msg.content) ? (
                 <MessageRenderer blocks={msg.content} />
               ) : (
-                msg.content
-              )}
-
-              {i === messages.length - 1 && isStreaming && (
-                <span className="animate-pulse">|</span> // 커서 느낌
+                <>
+                  {msg.content}
+                  {i === messages.length - 1 && isStreaming && (
+                    <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
+                      답변을 생성하는 중입니다
+                      <span className="animate-bounce">...</span>
+                    </p>
+                  )}
+                </>
               )}
             </div>
           ))}
