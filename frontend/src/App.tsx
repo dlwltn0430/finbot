@@ -198,27 +198,65 @@ export default function App() {
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
       <div
-        className={`flex w-80 flex-col justify-center transition-all duration-300 ${isSidebarOpen ? 'h-screen bg-[#EAE6E3]' : 'ml-7 mt-8 h-[60px] rounded-xl bg-white px-3 py-4 shadow-[0px_0px_4px_0px_rgba(99,99,99,0.24)]'}`}
+        className={`fixed left-0 top-0 z-20 h-full w-80 transform bg-[#EAE6E3] transition-transform duration-300 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
+        {/* 사이드바 콘텐츠는 항상 렌더링 */}
         <div
-          className={`flex items-center justify-between ${isSidebarOpen ? 'py-10 pl-7 pr-10' : ''}`}
+          className={`flex h-full flex-col justify-between transition-opacity duration-300`}
         >
-          <img
-            src={logo}
-            alt="KB 국민은행"
-            className="w-auto transition-opacity duration-300"
-          />
-
-          <div className="flex items-center gap-2">
-            <button onClick={toggleSidebar}>
+          {/* 사이드바 상단 */}
+          <div className="flex items-center justify-between py-10 pl-7 pr-10">
+            <img src={logo} alt="KB 국민은행" className="w-auto" />
+            <div className="flex items-center">
+              <button onClick={toggleSidebar}>
+                <img src={sidebarOpen} alt="사이드바 닫기" />
+              </button>
               <img
-                src={isSidebarOpen ? sidebarOpen : sidebarClose}
-                alt="사이드바 버튼"
+                src={isNewChatHovered ? newChatHover : newChat}
+                alt="새로운 대화 시작"
+                onClick={startNewChat}
+                onMouseEnter={() => setIsNewChatHovered(true)}
+                onMouseLeave={() => setIsNewChatHovered(false)}
+                className="cursor-pointer"
               />
+            </div>
+          </div>
+
+          {/* 채팅 목록 */}
+          <div className="flex-1 overflow-auto pl-7 pr-10">
+            <h2 className="mb-3 text-xs font-semibold text-[#7C7266]">오늘</h2>
+            {chatHistory.length === 0 ? (
+              <p className="text-sm text-[#7C7266]">저장된 대화가 없습니다.</p>
+            ) : (
+              chatHistory.map((chat, i) => (
+                <p
+                  key={i}
+                  className="cursor-pointer truncate px-3 py-2 font-normal text-[#1B1B1B]"
+                  onClick={() => {
+                    setCurrentChatId(chat.id);
+                    setMessages(chat.messages);
+                  }}
+                >
+                  {chat.title || '새로운 대화'} {/*TODO: */}
+                </p>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+      {/* 사이드바 닫힌 상태 상단 헤더 */}
+      {!isSidebarOpen && (
+        <div className="fixed left-0 top-0 z-10 ml-7 mt-6 flex h-[60px] w-[260px] items-center justify-between rounded-xl bg-white px-3 py-4 shadow-[0px_0px_4px_0px_rgba(99,99,99,0.24)]">
+          <img src={logo} alt="KB 국민은행" className="w-auto" />
+          <div className="ml-2 flex items-center">
+            <button onClick={toggleSidebar}>
+              <img src={sidebarClose} alt="사이드바 열기" />
             </button>
             <img
               src={isNewChatHovered ? newChatHover : newChat}
-              alt="새로운 대화 시작하기"
+              alt="새로운 대화 시작"
               onClick={startNewChat}
               onMouseEnter={() => setIsNewChatHovered(true)}
               onMouseLeave={() => setIsNewChatHovered(false)}
@@ -226,29 +264,7 @@ export default function App() {
             />
           </div>
         </div>
-
-        <div
-          className={`flex-1 overflow-auto pl-7 pr-10 ${isSidebarOpen ? 'block' : 'hidden'}`}
-        >
-          <h2 className="mb-3 text-xs font-semibold text-[#7C7266]">오늘</h2>
-          {chatHistory.length === 0 ? (
-            <p className="text-sm text-[#7C7266]">저장된 대화가 없습니다.</p>
-          ) : (
-            chatHistory.map((chat, i) => (
-              <p
-                key={i}
-                className="cursor-pointer truncate px-3 py-2 font-normal text-[#1B1B1B]"
-                onClick={() => {
-                  setCurrentChatId(chat.id);
-                  setMessages(chat.messages);
-                }}
-              >
-                {chat.title || '새로운 대화'} {/*TODO: */}
-              </p>
-            ))
-          )}
-        </div>
-      </div>
+      )}
 
       {/* 메인 채팅 영역 */}
       <div className="flex flex-1 flex-col justify-center">
