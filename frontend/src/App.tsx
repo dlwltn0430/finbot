@@ -267,7 +267,11 @@ export default function App() {
       )}
 
       {/* 메인 채팅 영역 */}
-      <div className="ml-80 flex flex-1 flex-col items-center justify-center px-20">
+      <div
+        className={`ml-80 flex h-screen flex-1 flex-col items-center px-20 ${
+          messages.length === 0 ? 'justify-center' : 'py-[100px]'
+        }`}
+      >
         {messages.length === 0 && (
           <div className="mb-9 text-center">
             <h2 className="text-3xl font-semibold text-[#7C7266]">
