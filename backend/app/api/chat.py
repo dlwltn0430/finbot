@@ -45,11 +45,6 @@ async def chat(req: ChatRequest):
         history=history,                     #type: ignore
     )
 
-    answer = [{
-        "paragraph": a.paragraph,
-        "urls": a.urls,
-    } for a in answer]
-
     messages = [*req.messages, {
         "role": "user",
         "content": req.question,
