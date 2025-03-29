@@ -153,10 +153,15 @@ export default function App() {
   ]);
 
   useEffect(() => {
-    if (!currentChatId) {
+    const history = getChatHistory();
+    if (history.length > 0) {
+      const last = history[history.length - 1];
+      setCurrentChatId(last.id);
+      setMessages(last.messages);
+    } else {
       startNewChat();
     }
-  }, [currentChatId]);
+  }, []);
 
   const startNewChat = () => {
     const newChatId = crypto.randomUUID();
