@@ -267,16 +267,16 @@ export default function App() {
       )}
 
       {/* 메인 채팅 영역 */}
-      <div className="flex flex-1 flex-col justify-center">
+      <div className="ml-80 flex flex-1 flex-col items-center justify-center px-20">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center">
+          <div className="mb-9 text-center">
             <h2 className="text-3xl font-semibold text-[#7C7266]">
               무엇을 도와드릴까요?
             </h2>
           </div>
         )}
 
-        <div className="flex max-h-[60vh] flex-col overflow-y-auto px-20 py-6">
+        <div className="w-full">
           {messages.map((msg, i) => (
             <div
               key={i}
@@ -295,51 +295,51 @@ export default function App() {
           ))}
 
           <div ref={bottomRef} />
-        </div>
 
-        {/* 채팅 입력창 */}
-        <div className="mt-9 flex items-center justify-center border-t">
-          <div className="relative w-full">
-            {/* 입력창 */}
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  if (e.shiftKey) return; // 줄바꿈 허용
-                  e.preventDefault();
-                  if (isStreaming) return;
+          {/* 채팅 입력창 */}
+          <div className="flex items-center justify-center border-t">
+            <div className="relative w-full">
+              {/* 입력창 */}
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    if (e.shiftKey) return; // 줄바꿈 허용
+                    e.preventDefault();
+                    if (isStreaming) return;
 
-                  if (!isStreaming && input.trim()) {
-                    sendMessage();
+                    if (!isStreaming && input.trim()) {
+                      sendMessage();
+                    }
                   }
-                }
-              }}
-              placeholder="궁금한 내용을 입력해주세요"
-              className="placeholder-gray-[#C3C3C3] max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
-              disabled={isStreaming}
-            />
-
-            <button
-              onClick={isStreaming ? cancelStreamingResponse : sendMessage}
-              onMouseEnter={() => setIsSendOrStopHovered(true)}
-              onMouseLeave={() => setIsSendOrStopHovered(false)}
-              className="absolute bottom-5 right-4 items-center justify-center"
-            >
-              <img
-                src={
-                  isStreaming
-                    ? isSendOrStopHovered
-                      ? stopIconHover
-                      : stopIcon
-                    : isSendOrStopHovered
-                      ? sendIconHover
-                      : sendIcon
-                }
-                alt={isStreaming ? '중단' : '전송'}
+                }}
+                placeholder="궁금한 내용을 입력해주세요"
+                className="placeholder-gray-[#C3C3C3] max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+                disabled={isStreaming}
               />
-            </button>
+
+              <button
+                onClick={isStreaming ? cancelStreamingResponse : sendMessage}
+                onMouseEnter={() => setIsSendOrStopHovered(true)}
+                onMouseLeave={() => setIsSendOrStopHovered(false)}
+                className="absolute bottom-5 right-4 items-center justify-center"
+              >
+                <img
+                  src={
+                    isStreaming
+                      ? isSendOrStopHovered
+                        ? stopIconHover
+                        : stopIcon
+                      : isSendOrStopHovered
+                        ? sendIconHover
+                        : sendIcon
+                  }
+                  alt={isStreaming ? '중단' : '전송'}
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>
