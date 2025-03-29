@@ -64,6 +64,9 @@ export default function App() {
       setChatHistory(updatedHistory);
     }
 
+    // 미리 placeholder 메시지 추가
+    setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+
     try {
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
@@ -76,20 +79,17 @@ export default function App() {
 
       // streaming UI용 문자열 추출
       // 타이핑 효과
-      let index = 0;
-      const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
+      // let index = 0;
+      // const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
 
-      typingIntervalRef.current = setInterval(() => {
-        setStreamedText(fullText.slice(0, ++index));
-        if (index >= fullText.length) {
-          clearInterval(typingIntervalRef.current!);
-          typingIntervalRef.current = null;
-          setIsStreaming(false);
-        }
-      }, 10);
-
-      // 미리 placeholder 메시지 추가
-      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+      // typingIntervalRef.current = setInterval(() => {
+      //   setStreamedText(fullText.slice(0, ++index));
+      //   if (index >= fullText.length) {
+      //     clearInterval(typingIntervalRef.current!);
+      //     typingIntervalRef.current = null;
+      //     setIsStreaming(false);
+      //   }
+      // }, 10);
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
     }
@@ -343,12 +343,14 @@ export default function App() {
               ) : (
                 <>
                   {msg.content}
-                  {i === messages.length - 1 && isStreaming && (
-                    <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
-                      답변을 생성하는 중입니다
-                      <span className="animate-bounce">...</span>
-                    </p>
-                  )}
+                  {msg.role === 'assistant' &&
+                    msg.content === '' &&
+                    isStreaming && (
+                      <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
+                        답변을 생성하는 중입니다
+                        <span className="animate-bounce">...</span>
+                      </p>
+                    )}
                 </>
               )}
             </div>
