@@ -49,4 +49,4 @@ class DepositChunkModel(Base):
     dense_vector = mapped_column(Vector(N_DIM))
     sparse_vector = mapped_column(SPARSEVEC(dim=V_DIM))
 
-    deposit: Mapped[DepositModel] = relationship(back_populates="chunks")
+    deposit: Mapped[DepositModel] = relationship(back_populates="chunks", lazy="joined")

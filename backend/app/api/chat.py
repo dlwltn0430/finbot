@@ -1,7 +1,9 @@
+import json
+from typing import List
 from fastapi import APIRouter
 from openai import AsyncOpenAI
 
-from schemas.chat import ChatRequest, ChatResponse
+from schemas.chat import ChatRequest, ChatResponse, KBChatAssistantMessage
 
 from dotenv import load_dotenv
 
@@ -14,11 +16,6 @@ router = APIRouter(prefix="/api")
 client = AsyncOpenAI()
 
 assistant = init_assistant()
-
-
-@router.get("/health_check")
-def health_check():
-    return {"message": "good"}
 
 
 @router.post("/chat", response_model=ChatResponse)
@@ -37,10 +34,21 @@ async def chat(req: ChatRequest):
         )
         title = completion.choices[0].message.content
 
+    history = [{
+        "role": message.role,
+        "content": [content.model_dump_json() for content in message.content]
+        if type(message) is KBChatAssistantMessage else str(message.content)
+    } for message in req.messages]
+
     answer = await assistant.pipeline_async(
         req.question,
-        history=req.messages,
+        history=history,                     #type: ignore
     )
+
+    answer = [{
+        "paragraph": a.paragraph,
+        "urls": a.urls,
+    } for a in answer]
 
     messages = [*req.messages, {
         "role": "user",
@@ -51,15 +59,8 @@ async def chat(req: ChatRequest):
     }]
 
     return {
-        "uuid": "",
         "title": title,
         "answer": answer,
         "question": req.question,
         "messages": messages,
-        "usage": {
-            "prompt_tokens": 0,
-            "cached_prompt_tokens": 0,
-            "completion_tokens": 0,
-            "total_tokens": 0
-        }
     }

@@ -1,17 +1,31 @@
-from openai.types.chat import ChatCompletionMessage, ChatCompletionMessageParam
 from pydantic import BaseModel
-from typing import Literal, List, Optional
+from typing import Literal, List, Optional, TypeAlias, Union
 
 
-class Message(BaseModel):
-    role: Literal["user", "assistant"]
+class KBChatContent(BaseModel):
+    paragraph: str
+    urls: List[str]
+
+
+class KBChatUserMessage(BaseModel):
+    role: Literal["user"]
     content: str
 
 
+class KBChatAssistantMessage(BaseModel):
+    role: Literal["assistant"]
+    content: List[KBChatContent]
+
+
+KBChatMessage: TypeAlias = Union[
+    KBChatUserMessage,
+    KBChatAssistantMessage,
+]
+
+
 class ChatRequest(BaseModel):
-    uuid: Optional[str] = None
     question: str
-    messages: List[ChatCompletionMessageParam] = []
+    messages: List[KBChatMessage] = []
 
 
 class Usage(BaseModel):
@@ -22,9 +36,7 @@ class Usage(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    uuid: str
     title: Optional[str] = None
-    answer: str
     question: str
-    messages: List[ChatCompletionMessageParam | ChatCompletionMessage] = []
-    usage: Usage
+    answer: List[KBChatContent]
+    messages: List[KBChatMessage] = []

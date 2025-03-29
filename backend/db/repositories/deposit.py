@@ -37,7 +37,7 @@ class DepositRepository(BaseRepository[DepositModel]):
         query = (
             self.session.query(DepositChunkModel).join(
                 subq,
-                (DepositChunkModel.deposit_id == subq.c.loan_id)
+                (DepositChunkModel.deposit_id == subq.c.deposit_id)
                 & (score_content == subq.c.max_score),
             ).order_by(subq.c.max_score.desc()).limit(k)
         )
