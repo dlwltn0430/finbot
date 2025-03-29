@@ -315,7 +315,7 @@ export default function App() {
       {/* 메인 채팅 영역 */}
       <div
         className={`ml-80 flex h-screen flex-1 flex-col items-center px-20 ${
-          messages.length === 0 ? 'justify-center' : 'py-[100px]'
+          messages.length === 0 ? 'justify-center' : 'relative py-[100px]'
         }`}
       >
         {messages.length === 0 && (
@@ -326,11 +326,15 @@ export default function App() {
           </div>
         )}
 
-        <div className="w-full">
+        <div
+          className={`w-full ${
+            messages.length === 0 ? '' : 'flex-1 overflow-y-auto pb-[36px]'
+          }`}
+        >
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-4 font-medium leading-7 text-[#1B1B1B] ${msg.role === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'}`}
+              className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-3 font-medium leading-7 text-[#1B1B1B] ${msg.role === 'user' ? 'ml-auto bg-[#FAF8F6]' : 'mr-auto'}`}
             >
               {Array.isArray(msg.content) ? (
                 <MessageRenderer blocks={msg.content} />
@@ -347,7 +351,13 @@ export default function App() {
           <div ref={bottomRef} />
 
           {/* 채팅 입력창 */}
-          <div className="flex items-center justify-center border-t">
+          <div
+            className={`${
+              messages.length === 0
+                ? 'flex items-center justify-center border-t'
+                : 'absolute bottom-0 left-0 w-full border-t bg-white px-20 py-5'
+            }`}
+          >
             <div className="relative w-full">
               {/* 입력창 */}
               <textarea
