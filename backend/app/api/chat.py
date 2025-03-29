@@ -1,13 +1,13 @@
-import json
-from typing import List
 from fastapi import APIRouter
 from openai import AsyncOpenAI
 
-from schemas.chat import ChatRequest, ChatResponse, KBChatAssistantMessage
+from schemas.chat import ChatRequest, ChatResponse
 
 from dotenv import load_dotenv
 
 from services.assistant import init_assistant
+
+import json
 
 load_dotenv()
 
@@ -36,8 +36,8 @@ async def chat(req: ChatRequest):
 
     history = [{
         "role": message.role,
-        "content": [content.model_dump_json() for content in message.content]
-        if type(message) is KBChatAssistantMessage else str(message.content)
+        "content": json.dumps([content.model_dump_json() for content in message.content])
+        if not isinstance(message.content, str) else message.content
     } for message in req.messages]
 
     answer = await assistant.pipeline_async(
