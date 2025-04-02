@@ -333,7 +333,7 @@ export default function App() {
 
       {/* 메인 채팅 영역 */}
       <div
-        className={`ml-80 flex h-screen flex-1 flex-col items-center px-20 ${
+        className={`ml-80 flex h-screen flex-1 flex-col items-center px-6 sm:px-10 md:px-16 lg:px-20 xl:px-24 2xl:px-32 ${
           messages.length === 0
             ? 'justify-center'
             : 'relative pb-[200px] pt-[100px]'
@@ -348,7 +348,7 @@ export default function App() {
         )}
 
         <div
-          className={`w-full ${
+          className={`w-full max-w-screen-lg ${
             messages.length === 0 ? '' : 'flex-1 overflow-y-auto pb-[36px]'
           }`}
         >
@@ -393,7 +393,7 @@ export default function App() {
                 : 'absolute bottom-0 left-0 w-full border-t bg-white px-20 py-5'
             }`}
           >
-            <div className="relative w-full">
+            <div className="relative mx-auto w-full max-w-screen-lg">
               {/* 입력창 */}
               <textarea
                 ref={textareaRef}
@@ -419,7 +419,7 @@ export default function App() {
                 onClick={isStreaming ? cancelStreamingResponse : sendMessage}
                 onMouseEnter={() => setIsSendOrStopHovered(true)}
                 onMouseLeave={() => setIsSendOrStopHovered(false)}
-                className="absolute bottom-5 right-4 items-center justify-center"
+                className="absolute bottom-8 right-6 items-center justify-center"
               >
                 <img
                   src={
