@@ -24,7 +24,7 @@ export interface ChatResponse {
   messages: ChatMessage[];
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // const devMode = import.meta.env.DEV;
 
 export const sendChatMessage = async (
@@ -33,7 +33,7 @@ export const sendChatMessage = async (
   // if (devMode) return chatMock;
 
   const response = await axios.post<ChatResponse>(
-    `${API_BASE_URL}/api/chat`,
+    `/api/chat`,
     data
   );
 
