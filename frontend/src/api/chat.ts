@@ -18,7 +18,7 @@ export interface ChatRequest {
 }
 
 export interface ChatResponse {
-  title: string;
+  title: string | null;
   question: string;
   answer: ChatContent[];
   messages: ChatMessage[];
