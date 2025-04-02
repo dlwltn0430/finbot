@@ -38,6 +38,7 @@ export default function App() {
     []
   );
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isError, setIsError] = useState(false);
 
   const sendMessage = async () => {
     if (!input.trim() || !currentChatId) return;
@@ -68,10 +69,12 @@ export default function App() {
     setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
     try {
+      console.log(updatedMessages);
+
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
         question: input,
-        messages: [], // TODO: 이것도 사용 안하는 값?
+        messages: updatedMessages, // TODO: 이것도 사용 안하는 값?
       });
 
       setLastResponse(response); // ✅ 저장
@@ -79,19 +82,30 @@ export default function App() {
 
       // streaming UI용 문자열 추출
       // 타이핑 효과
-      // let index = 0;
-      // const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
+      let index = 0;
+      const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
 
-      // typingIntervalRef.current = setInterval(() => {
-      //   setStreamedText(fullText.slice(0, ++index));
-      //   if (index >= fullText.length) {
-      //     clearInterval(typingIntervalRef.current!);
-      //     typingIntervalRef.current = null;
-      //     setIsStreaming(false);
-      //   }
-      // }, 10);
+      typingIntervalRef.current = setInterval(() => {
+        setStreamedText(fullText.slice(0, ++index));
+        if (index >= fullText.length) {
+          clearInterval(typingIntervalRef.current!);
+          typingIntervalRef.current = null;
+          setIsStreaming(false);
+        }
+      }, 10);
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
+      setIsStreaming(false);
+      setIsError(true);
+
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          role: 'assistant',
+          content: '답변 생성 중 오류가 발생하였습니다.',
+        };
+        return updated;
+      });
     }
   };
 
@@ -280,6 +294,11 @@ export default function App() {
                           onClick={() => {
                             setCurrentChatId(chat.id);
                             setMessages(chat.messages);
+
+                            setIsStreaming(false);
+                            setStreamedText('');
+                            setStreamedTextContent([]);
+                            setLastResponse(null);
                           }}
                         >
                           {chat.title || '새로운 대화'}
@@ -343,14 +362,22 @@ export default function App() {
               ) : (
                 <>
                   {msg.content}
+
                   {msg.role === 'assistant' &&
                     msg.content === '' &&
-                    isStreaming && (
+                    isStreaming &&
+                    !isError && (
                       <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
                         답변을 생성하는 중입니다
                         <span className="animate-bounce">...</span>
                       </p>
                     )}
+
+                  {/* {isError && (
+                    <p className="mt-2 text-sm text-red-500">
+                      답변 생성 중 오류가 발생하였습니다.
+                    </p>
+                  )} */}
                 </>
               )}
             </div>
