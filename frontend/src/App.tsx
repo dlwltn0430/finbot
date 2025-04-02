@@ -74,7 +74,7 @@ export default function App() {
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
         question: input,
-        messages: updatedMessages, // TODO: 이것도 사용 안하는 값?
+        messages: updatedMessages.slice(0, -1), // TODO: 이것도 사용 안하는 값?
       });
 
       setLastResponse(response); // ✅ 저장

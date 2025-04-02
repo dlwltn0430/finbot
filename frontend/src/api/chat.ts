@@ -32,10 +32,7 @@ export const sendChatMessage = async (
 ): Promise<ChatResponse> => {
   // if (devMode) return chatMock;
 
-  const response = await axios.post<ChatResponse>(
-    `/api/chat`,
-    data
-  );
-
+  const response = await axios.post<ChatResponse>(`/api/chat`, data);
+  // console.log(response.data);
   return response.data;
 };
