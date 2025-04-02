@@ -69,10 +69,12 @@ export default function App() {
     setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
     try {
+      console.log(updatedMessages);
+
       const response = await sendChatMessage({
         uuid: 'test', // TODO: 사용 안하는 값
         question: input,
-        messages: [], // TODO: 이것도 사용 안하는 값?
+        messages: updatedMessages, // TODO: 이것도 사용 안하는 값?
       });
 
       setLastResponse(response); // ✅ 저장
@@ -371,11 +373,11 @@ export default function App() {
                       </p>
                     )}
 
-                  {isError && (
+                  {/* {isError && (
                     <p className="mt-2 text-sm text-red-500">
                       답변 생성 중 오류가 발생하였습니다.
                     </p>
-                  )}
+                  )} */}
                 </>
               )}
             </div>
