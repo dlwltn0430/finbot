@@ -38,7 +38,7 @@ export default function App() {
     []
   );
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [isError, setIsError] = useState(false);
+  // const [isError, setIsError] = useState(false);
 
   const sendMessage = async () => {
     if (!input.trim() || !currentChatId) return;
@@ -96,7 +96,7 @@ export default function App() {
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
       setIsStreaming(false);
-      setIsError(true);
+      // setIsError(true);
 
       setMessages((prev) => {
         const updated = [...prev];
@@ -363,10 +363,9 @@ export default function App() {
                 <>
                   {msg.content}
 
-                  {msg.role === 'assistant' &&
-                    msg.content === '' &&
-                    isStreaming &&
-                    !isError && (
+                  {isStreaming &&
+                    msg.role === 'assistant' &&
+                    i === messages.length - 1 && (
                       <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
                         답변을 생성하는 중입니다
                         <span className="animate-bounce">...</span>
