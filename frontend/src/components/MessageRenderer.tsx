@@ -9,7 +9,7 @@ interface MessageRendererProps {
 }
 
 export const MessageRenderer = ({ blocks }: MessageRendererProps) => {
-  console.log({ blocks });
+  // console.log({ blocks });
   return (
     <div className="flex flex-col gap-6">
       {blocks.map((block, i) => (
