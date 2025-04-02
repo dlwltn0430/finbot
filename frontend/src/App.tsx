@@ -38,6 +38,7 @@ export default function App() {
     []
   );
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isError, setIsError] = useState(false);
 
   const sendMessage = async () => {
     if (!input.trim() || !currentChatId) return;
@@ -92,6 +93,17 @@ export default function App() {
       }, 10);
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
+      setIsStreaming(false);
+      setIsError(true);
+
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          role: 'assistant',
+          content: '답변 생성 중 오류가 발생하였습니다.',
+        };
+        return updated;
+      });
     }
   };
 
@@ -348,14 +360,22 @@ export default function App() {
               ) : (
                 <>
                   {msg.content}
+
                   {msg.role === 'assistant' &&
                     msg.content === '' &&
-                    isStreaming && (
+                    isStreaming &&
+                    !isError && (
                       <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
                         답변을 생성하는 중입니다
                         <span className="animate-bounce">...</span>
                       </p>
                     )}
+
+                  {isError && (
+                    <p className="mt-2 text-sm text-red-500">
+                      답변 생성 중 오류가 발생하였습니다.
+                    </p>
+                  )}
                 </>
               )}
             </div>
