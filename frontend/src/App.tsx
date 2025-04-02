@@ -79,17 +79,17 @@ export default function App() {
 
       // streaming UI용 문자열 추출
       // 타이핑 효과
-      // let index = 0;
-      // const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
+      let index = 0;
+      const fullText = response.answer.map((a) => a.paragraph).join('\n\n');
 
-      // typingIntervalRef.current = setInterval(() => {
-      //   setStreamedText(fullText.slice(0, ++index));
-      //   if (index >= fullText.length) {
-      //     clearInterval(typingIntervalRef.current!);
-      //     typingIntervalRef.current = null;
-      //     setIsStreaming(false);
-      //   }
-      // }, 10);
+      typingIntervalRef.current = setInterval(() => {
+        setStreamedText(fullText.slice(0, ++index));
+        if (index >= fullText.length) {
+          clearInterval(typingIntervalRef.current!);
+          typingIntervalRef.current = null;
+          setIsStreaming(false);
+        }
+      }, 10);
     } catch (error) {
       console.error('챗봇 응답 실패:', error);
     }
@@ -280,6 +280,11 @@ export default function App() {
                           onClick={() => {
                             setCurrentChatId(chat.id);
                             setMessages(chat.messages);
+
+                            setIsStreaming(false);
+                            setStreamedText('');
+                            setStreamedTextContent([]);
+                            setLastResponse(null);
                           }}
                         >
                           {chat.title || '새로운 대화'}
