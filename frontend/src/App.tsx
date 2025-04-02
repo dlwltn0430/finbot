@@ -50,7 +50,7 @@ export default function App() {
     setIsStreaming(true);
     setStreamedText('');
     setStreamedTextContent([]);
-    setLastResponse(null);
+    // setLastResponse(null);
 
     // 새 채팅방일 경우에만 저장
     if (chatHistory.every((chat) => chat.id !== currentChatId)) {
@@ -77,7 +77,18 @@ export default function App() {
         messages: updatedMessages.slice(0, -1), // TODO: 이것도 사용 안하는 값?
       });
 
-      setLastResponse(response); // ✅ 저장
+      setLastResponse((prev) => {
+        console.log(prev)
+        if (prev !== null) {
+          return {
+            ...response,
+            title: prev.title
+          }
+        }
+
+        return response
+      })
+
       setStreamedTextContent(response.answer); // ✅ 저장
 
       // streaming UI용 문자열 추출
