@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   ChatContent,
@@ -199,7 +200,7 @@ export default function App() {
   }, []);
 
   const startNewChat = () => {
-    const newChatId = crypto.randomUUID();
+    const newChatId = uuidv4();
     setCurrentChatId(newChatId);
     setMessages([]);
     setStreamedText('');
@@ -258,9 +259,8 @@ export default function App() {
     <div className="flex h-screen bg-white">
       {/* 사이드바 */}
       <div
-        className={`fixed left-0 top-0 z-20 h-full w-80 transform bg-[#EAE6E3] transition-transform duration-300 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed left-0 top-0 z-20 h-full w-80 transform bg-[#EAE6E3] transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         {/* 사이드바 콘텐츠는 항상 렌더링 */}
         <div
@@ -344,11 +344,10 @@ export default function App() {
 
       {/* 메인 채팅 영역 */}
       <div
-        className={`ml-80 flex h-screen flex-1 flex-col items-center px-6 sm:px-10 md:px-16 lg:px-20 xl:px-24 2xl:px-32 ${
-          messages.length === 0
-            ? 'justify-center'
-            : 'relative pb-[200px] pt-[100px]'
-        }`}
+        className={`ml-80 flex h-screen flex-1 flex-col items-center px-6 sm:px-10 md:px-16 lg:px-20 xl:px-24 2xl:px-32 ${messages.length === 0
+          ? 'justify-center'
+          : 'relative pb-[200px] pt-[100px]'
+          }`}
       >
         {messages.length === 0 && (
           <div className="mb-9 text-center">
@@ -359,9 +358,8 @@ export default function App() {
         )}
 
         <div
-          className={`w-full max-w-screen-lg ${
-            messages.length === 0 ? '' : 'flex-1 overflow-y-auto pb-[36px]'
-          }`}
+          className={`w-full max-w-screen-lg ${messages.length === 0 ? '' : 'flex-1 overflow-y-auto pb-[36px]'
+            }`}
         >
           {messages.map((msg, i) => (
             <div
@@ -397,11 +395,10 @@ export default function App() {
 
           {/* 채팅 입력창 */}
           <div
-            className={`${
-              messages.length === 0
-                ? 'flex items-center justify-center border-t'
-                : 'absolute bottom-0 left-0 w-full border-t bg-white px-20 py-5'
-            }`}
+            className={`${messages.length === 0
+              ? 'flex items-center justify-center border-t'
+              : 'absolute bottom-0 left-0 w-full border-t bg-white px-20 py-5'
+              }`}
           >
             <div className="relative mx-auto w-full max-w-screen-lg">
               {/* 입력창 */}
