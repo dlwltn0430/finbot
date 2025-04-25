@@ -1,0 +1,80 @@
+import { useEffect, useRef, useState } from 'react';
+
+import sendIconHover from '@/assets/send-icon-hover.svg';
+import sendIcon from '@/assets/send-icon.svg';
+import stopIconHover from '@/assets/stop-icon-hover.svg';
+import stopIcon from '@/assets/stop-icon.svg';
+
+interface ChatInputProps {
+  input: string;
+  setInput: (value: string) => void;
+  isStreaming: boolean;
+  onSend: () => void;
+  onCancel: () => void;
+}
+
+export const ChatInput = ({
+  input,
+  setInput,
+  isStreaming,
+  onSend,
+  onCancel,
+}: ChatInputProps) => {
+  const [isSendOrStopHovered, setIsSendOrStopHovered] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 220)}px`; // 자동 높이 + 최대 높이 220px로 제한
+    }
+  }, [input]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      if (e.shiftKey) return; // 줄바꿈 허용
+      e.preventDefault();
+
+      if (isStreaming) return;
+
+      if (!isStreaming && input.trim()) {
+        onSend();
+      }
+    }
+  };
+
+  return (
+    <div className="relative mx-auto w-full max-w-screen-lg">
+      <textarea
+        ref={textareaRef}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="궁금한 내용을 입력해주세요"
+        className="placeholder-gray-[#C3C3C3] max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[32px] border border-[#EDEDED] bg-white p-6 text-gray-700 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+        disabled={isStreaming}
+      />
+
+      <button
+        onClick={isStreaming ? onCancel : onSend}
+        onMouseEnter={() => setIsSendOrStopHovered(true)}
+        onMouseLeave={() => setIsSendOrStopHovered(false)}
+        className="absolute bottom-8 right-6 items-center justify-center"
+      >
+        <img
+          src={
+            isStreaming
+              ? isSendOrStopHovered
+                ? stopIconHover
+                : stopIcon
+              : isSendOrStopHovered
+                ? sendIconHover
+                : sendIcon
+          }
+          alt={isStreaming ? '중단' : '전송'}
+        />
+      </button>
+    </div>
+  );
+};
