@@ -30,12 +30,12 @@ export const HomePage = () => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]); // TODO: typingText 도 의존 배열에 있었는데 지움
+  }, [messages]); // typingText 제외
 
   useEffect(() => {
     const history = getChatHistory();
     setChatHistory(history);
-  }, []);
+  }, [setChatHistory]); // setChatHistory를 의존성 배열에 추가
 
   useEffect(() => {
     const history = getChatHistory();
