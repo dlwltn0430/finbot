@@ -2,7 +2,7 @@ import { ChatMessage } from '@/api/chat';
 
 import { ChatbotResponseRenderer } from './ChatbotResponseRenderer';
 
-interface ChatMessageProps {
+interface MessageItemProps {
   message: ChatMessage;
   isStreaming: boolean;
   isLastMessage: boolean;
@@ -12,7 +12,7 @@ export const MessageItem = ({
   message,
   isStreaming,
   isLastMessage,
-}: ChatMessageProps) => {
+}: MessageItemProps) => {
   return (
     <div
       className={`mb-8 w-fit max-w-[70%] rounded-[32px] px-7 py-3 font-medium leading-7 text-[#1B1B1B] ${
