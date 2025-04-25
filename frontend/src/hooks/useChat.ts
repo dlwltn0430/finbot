@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   ChatHistoryItem,
   getChatHistory,
@@ -30,7 +32,7 @@ export const useChat = () => {
   };
 
   const startNewChat = () => {
-    const newChatId = crypto.randomUUID();
+    const newChatId = uuidv4();
     setCurrentChatId(newChatId);
     setMessages([]);
     setTypingText('');
@@ -47,7 +49,7 @@ export const useChat = () => {
     setIsStreaming(true);
     setTypingText('');
     setCompleteResponse([]);
-    setLastResponse(null);
+    // setLastResponse(null);
 
     if (chatHistory.every((chat) => chat.id !== currentChatId)) {
       const newChat = {
@@ -70,7 +72,17 @@ export const useChat = () => {
         messages: updatedMessages.slice(0, -1),
       });
 
-      setLastResponse(response);
+      setLastResponse((prev) => {
+        if (prev !== null) {
+          return {
+            ...response,
+            title: prev.title,
+          };
+        }
+
+        return response;
+      });
+
       setCompleteResponse(response.answer);
 
       let index = 0;

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { ChatMessage } from '@/api/chat';
 
 export interface ChatHistoryItem {
@@ -24,7 +26,7 @@ export const getChatHistory = (): ChatHistoryItem[] => {
   ) as Partial<ChatHistoryItem>[];
 
   return raw.map((chat) => ({
-    id: chat.id ?? crypto.randomUUID(),
+    id: chat.id ?? uuidv4(),
     title: chat.title ?? '',
     messages: chat.messages ?? [],
     createdAt: chat.createdAt || new Date().toISOString(),
