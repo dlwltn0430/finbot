@@ -1,6 +1,6 @@
 import { ChatMessage } from '@/api/chat';
 
-interface ChatHistoryItem {
+export interface ChatHistoryItem {
   id: string;
   title: string;
   messages: ChatMessage[];
@@ -18,12 +18,7 @@ export const saveChatToLocal = (
   localStorage.setItem('chatHistory', JSON.stringify(next));
 };
 
-export const getChatHistory = (): {
-  id: string;
-  title: string;
-  messages: ChatMessage[];
-  createdAt: string;
-}[] => {
+export const getChatHistory = (): ChatHistoryItem[] => {
   const raw = JSON.parse(
     localStorage.getItem('chatHistory') || '[]'
   ) as Partial<ChatHistoryItem>[];
