@@ -4,12 +4,13 @@ import { ChatContent } from '@/api/chat';
 
 import linkIcon from '@/assets/link-icon.svg';
 
-interface MessageRendererProps {
+interface ChatbotResponseRendererProps {
   blocks: ChatContent[];
 }
 
-export const MessageRenderer = ({ blocks }: MessageRendererProps) => {
-  // console.log({ blocks });
+export const ChatbotResponseRenderer = ({
+  blocks,
+}: ChatbotResponseRendererProps) => {
   return (
     <div className="flex flex-col gap-6">
       {blocks.map((block, i) => (
