@@ -1,5 +1,5 @@
 export const chatMock = {
-  title: '대출 추천!',
+  title: '디폴트는 내용 요약되어 들어감',
   question: '대출 상품 추천해줘.',
   answer: [
     {
