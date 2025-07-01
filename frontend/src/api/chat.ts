@@ -1,4 +1,4 @@
-// import { chatMock } from '@/mock/mock';
+import { chatMock } from '@/mock/mock';
 import axios from 'axios';
 
 export interface ChatMessage {
@@ -25,12 +25,12 @@ export interface ChatResponse {
 }
 
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// const devMode = import.meta.env.DEV;
+const devMode = import.meta.env.DEV;
 
 export const sendChatMessage = async (
   data: ChatRequest
 ): Promise<ChatResponse> => {
-  // if (devMode) return chatMock;
+  if (devMode) return chatMock;
 
   const response = await axios.post<ChatResponse>(`/api/chat`, data);
   // console.log(response.data);
