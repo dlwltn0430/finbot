@@ -9,7 +9,7 @@ import { MessageItem } from '@/components/MessageItem';
 import { Sidebar } from '@/components/Sidebar';
 
 export const HomePage = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const {
     selectChat,
     startNewChat,
@@ -49,6 +49,13 @@ export const HomePage = () => {
 
   return (
     <div className="flex h-screen bg-white">
+      <div className="absolute right-[60px] top-[36px] flex items-center gap-[8px]">
+        <div className="h-8 w-8 rounded-full bg-[#D9D9D9]" />
+        <span className="text-[16px] font-[700] text-[#333534]">
+          이용자 이름
+        </span>
+      </div>
+
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -58,15 +65,15 @@ export const HomePage = () => {
       />
 
       <div
-        className={`ml-80 flex h-screen flex-1 flex-col items-center px-6 sm:px-10 md:px-16 lg:px-20 xl:px-24 2xl:px-32 ${
-          messages.length === 0
-            ? 'justify-center'
-            : 'relative pb-[200px] pt-[100px]'
-        }`}
+        className={`flex h-screen flex-1 flex-col items-center transition-all duration-300 ${
+          isSidebarOpen
+            ? 'ml-[396px]' // 100px + 296px
+            : 'ml-[100px]'
+        } ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[100px]'}`}
       >
         {messages.length === 0 && (
           <div className="mb-9 text-center">
-            <h2 className="text-3xl font-semibold text-[#7C7266]">
+            <h2 className="text-[40px] font-[600] text-[#5D5F62]">
               무엇을 도와드릴까요?
             </h2>
           </div>
