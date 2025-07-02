@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import sendIconHover from '@/assets/chat/send-icon-hover.svg';
 import sendIcon from '@/assets/chat/send-icon.svg';
+import sendIconDisabled from '@/assets/chat/send-icon-disabled.svg';
 import stopIconHover from '@/assets/chat/stop-icon-hover.svg';
 import stopIcon from '@/assets/chat/stop-icon.svg';
 
@@ -52,7 +53,7 @@ export const ChatInput = ({
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="궁금한 내용을 입력해주세요"
-        className="placeholder-gray3 max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[32px] border border-[#EDEDED] bg-white p-6 text-black shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none text-[20px]"
+        className="placeholder-gray3 max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[24px] border border-[gray2] bg-white p-6 text-black shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none text-[20px] font-[500]"
         disabled={isStreaming}
       />
 
@@ -68,11 +69,14 @@ export const ChatInput = ({
               ? isSendOrStopHovered
                 ? stopIconHover
                 : stopIcon
-              : isSendOrStopHovered
-                ? sendIconHover
-                : sendIcon
+              : !input.trim()
+                ? sendIconDisabled
+                : isSendOrStopHovered
+                  ? sendIconHover
+                  : sendIcon
           }
           alt={isStreaming ? '중단' : '전송'}
+          className='w-[36px]'
         />
       </button>
     </div>
