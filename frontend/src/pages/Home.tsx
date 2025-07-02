@@ -76,7 +76,7 @@ export const HomePage = () => {
         )}
 
         <div
-          className={`w-full max-w-[720px] bg-red-200 ${
+          className={`w-full max-w-[800px] bg-red-200 ${
             messages.length === 0 ? '' : 'flex-1 overflow-y-auto'
           }`}
         >
