@@ -51,37 +51,37 @@ export const Sidebar = ({
   return (
     <div>
       {/* 접힌 상태 */}
-      <div className="border-gray2 fixed left-0 top-0 z-30 flex h-screen w-[100px] flex-col items-center justify-between border-r bg-[#FBFBFB] pb-[44px] pt-[36px]">
+      <div className="border-gray2 fixed left-0 top-0 z-30 flex h-screen w-[76px] flex-col items-center justify-between border-r bg-[#FBFBFB] pb-[44px] pt-[36px]">
         <div className="flex h-full flex-col items-center">
-          <img src={logo} alt="logo" className="w-15" />
+          <img src={logo} alt="logo" className="w-[52px]" />
           <div
-            className="text-gray3 hover:text-gray5 mt-[52px] flex cursor-pointer flex-col items-center"
+            className="text-gray3 hover:text-gray5 mt-[44px] flex cursor-pointer flex-col items-center font-[400]"
             onClick={toggleSidebar}
           >
-            <img src={prevIcon} alt="이전 기록" className="w-13" />
+            <img src={prevIcon} alt="이전 기록" className="w-[40px]" />
             <span>이전 기록</span>
           </div>
-          <div className="text-gray3 hover:text-gray5 mt-[24px] flex cursor-pointer flex-col items-center">
-            <img src={policyIcon} alt="정책" className="w-13" />
+          <div className="text-gray3 hover:text-gray5 mt-[36px] flex cursor-pointer flex-col items-center font-[400]">
+            <img src={policyIcon} alt="정책" className="w-[40px]" />
             <span>정책</span>
           </div>
         </div>
 
         <button onClick={startNewChat}>
-          <img src={newChat} alt="new" className="w-13" />
+          <img src={newChat} alt="new" className="w-[40px]" />
         </button>
       </div>
 
       {/* 펼친 상태 */}
       <div
-        className={`border-gray2 absolute left-[100px] top-0 z-20 h-full w-[296px] transform overflow-y-auto border-r bg-[#FBFBFB] px-[24px] pt-[64px] transition-transform duration-300 ease-in-out ${
+        className={`border-gray2 absolute left-[76px] top-0 z-20 h-full w-[240px] transform overflow-y-auto border-r bg-[#FBFBFB] px-[16px] pt-[64px] transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {Object.entries(groupChatsByDate([...chatHistory].reverse())).map(
           ([label, chats]) =>
             chats.length > 0 && (
-              <div key={label} className="mb-5">
+              <div key={label} className="mb-[32px]">
                 <h3 className="text-main mb-[12px] text-[12px] font-[600]">
                   {label}
                 </h3>
@@ -89,7 +89,7 @@ export const Sidebar = ({
                   {chats.map((chat) => (
                     <li
                       key={chat.id}
-                      className="mb-1 cursor-pointer truncate py-[8px] text-[16px] font-[400] text-[#242525]"
+                      className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525]"
                       onClick={() => onChatSelect(chat.id, chat.messages)}
                     >
                       {chat.title || '새로운 대화'}
