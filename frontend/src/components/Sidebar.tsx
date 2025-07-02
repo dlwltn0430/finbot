@@ -2,10 +2,10 @@ import { ChatHistoryItem } from '@/utils/chatStorage';
 
 import { ChatMessage } from '@/api/chat';
 
-import logo from '@/assets/logo.svg';
-import newChat from '@/assets/new-chat.svg';
-import policyIcon from '@/assets/policy.svg';
-import prevIcon from '@/assets/prev.svg';
+import logo from '@/assets/sidebar/logo.svg';
+import newChat from '@/assets/sidebar/new-chat.svg';
+import policyIcon from '@/assets/sidebar/policy.svg';
+import prevIcon from '@/assets/sidebar/prev.svg';
 
 interface SidebarProps {
   isSidebarOpen: boolean;
