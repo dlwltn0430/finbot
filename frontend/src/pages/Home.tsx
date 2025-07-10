@@ -94,8 +94,8 @@ export const HomePage = () => {
           <div
             className={`${
               messages.length === 0
-                ? 'flex items-center justify-center border-t'
-                : 'absolute bottom-0 left-0 w-full border-t py-5'
+                ? 'flex items-center justify-center'
+                : 'absolute bottom-0 left-0 w-full py-5'
             }`}
           >
             <ChatInput
