@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .custom-bullet {
-    @apply w-[8px] h-[8px] bg-[#DBDEE0] rounded-full transition-all duration-300;
+  @apply h-[8px] w-[8px] rounded-full bg-[#DBDEE0] transition-all duration-300;
 }
-  
+
 .swiper-pagination-bullet-active.custom-bullet {
-    @apply bg-[#96989A] rounded-full;
+  @apply rounded-full bg-[#96989A];
 }

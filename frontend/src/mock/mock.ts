@@ -88,61 +88,64 @@ export const chatMock = {
 
 // new
 export const responseMock = {
-	chat_id: "6df7bd7d-5042-4523-8eaf-8822aa42fe0d",
-	status: "response",
-	content: {
-		products: [
-			{
-				product_type: "deposit",
-				description: "상품 특징 또는 간략한 설명1",
-				company: "회사/은행 이름1",
-				options: [
-					{
-						"category": "최고",
-						"value": "연 8.0%"
-					},
-					{
-						"category": "기본",
-						"value": "연 3.5%"
-					}
-				],
-				"details": "병사봉급 한도 내에서 복무기간 동안 목돈마련을 원하는 병역 의무복무자 ...",
-				"tags": ["목돈 마련", "군적금"]
-			},
+  chat_id: '6df7bd7d-5042-4523-8eaf-8822aa42fe0d',
+  status: 'response',
+  content: {
+    products: [
       {
-				product_type: "deposit",
-				description: "상품 특징 또는 간략한 설명2",
-				company: "은행이름2",
-				options: [
-					{
-						"category": "최고",
-						"value": "연 8.0%"
-					},
-					{
-						"category": "기본",
-						"value": "연 3.5%"
-					}
-				],
-				"details": "병사봉급 한도 내에서 복무기간 동안 목돈마련을 원하는 병역 의무복무자 맞춤형 상품",
-				"tags": ["목돈 마련", "군적금"]
-			},
+        product_type: 'deposit',
+        description: '상품 특징 또는 간략한 설명1',
+        company: '회사/은행 이름1',
+        options: [
+          {
+            category: '최고',
+            value: '연 8.0%',
+          },
+          {
+            category: '기본',
+            value: '연 3.5%',
+          },
+        ],
+        details:
+          '병사봉급 한도 내에서 복무기간 동안 목돈마련을 원하는 병역 의무복무자 ...',
+        tags: ['목돈 마련', '군적금'],
+      },
       {
-				product_type: "deposit",
-				description: "상품 특징 또는 간략한 설명3",
-				company: "회사/은행 이름3",
-				options: [
-					{
-						"category": "최고",
-						"value": "연 8.0%"
-					},
-					{
-						"category": "기본",
-						"value": "연 3.5%"
-					}
-				],
-				"details": "병사봉급 한도 내에서 복무기간 동안 목돈마련을 원하는 병역 의무복무자 ...",
-				"tags": ["목돈 마련", "군적금"]
-			},
-		],
-	}
-}
+        product_type: 'deposit',
+        description: '상품 특징 또는 간략한 설명2',
+        company: '은행이름2',
+        options: [
+          {
+            category: '최고',
+            value: '연 8.0%',
+          },
+          {
+            category: '기본',
+            value: '연 3.5%',
+          },
+        ],
+        details:
+          '병사봉급 한도 내에서 복무기간 동안 목돈마련을 원하는 병역 의무복무자 맞춤형 상품',
+        tags: ['목돈 마련', '군적금'],
+      },
+      {
+        product_type: 'deposit',
+        description: '상품 특징 또는 간략한 설명3',
+        company: '회사/은행 이름3',
+        options: [
+          {
+            category: '최고',
+            value: '연 8.0%',
+          },
+          {
+            category: '기본',
+            value: '연 3.5%',
+          },
+        ],
+        details:
+          '병사봉급 한도 내에서 복무기간 동안 목돈마련을 원하는 병역 의무복무자 ...',
+        tags: ['목돈 마련', '군적금'],
+      },
+    ],
+  },
+};

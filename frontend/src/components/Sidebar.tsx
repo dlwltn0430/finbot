@@ -51,17 +51,17 @@ export const Sidebar = ({
   return (
     <div>
       {/* 접힌 상태 */}
-      <div className="border-gray2 fixed left-0 top-0 z-30 flex h-screen w-[76px] flex-col items-center justify-between border-r bg-[#FBFBFB] pb-[44px] pt-[36px]">
+      <div className="fixed left-0 top-0 z-30 flex h-screen w-[76px] flex-col items-center justify-between border-r border-gray2 bg-[#FBFBFB] pb-[44px] pt-[36px]">
         <div className="flex h-full flex-col items-center">
           <img src={logo} alt="logo" className="w-[52px]" />
           <div
-            className="text-gray3 hover:text-gray5 mt-[44px] flex cursor-pointer flex-col items-center font-[400]"
+            className="mt-[44px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
             onClick={toggleSidebar}
           >
             <img src={prevIcon} alt="이전 기록" className="w-[40px]" />
             <span>이전 기록</span>
           </div>
-          <div className="text-gray3 hover:text-gray5 mt-[36px] flex cursor-pointer flex-col items-center font-[400]">
+          <div className="mt-[36px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5">
             <img src={policyIcon} alt="정책" className="w-[40px]" />
             <span>정책</span>
           </div>
@@ -74,7 +74,7 @@ export const Sidebar = ({
 
       {/* 펼친 상태 */}
       <div
-        className={`border-gray2 absolute left-[76px] top-0 z-20 h-full w-[240px] transform overflow-y-auto border-r bg-[#FBFBFB] px-[16px] pt-[64px] transition-transform duration-300 ease-in-out ${
+        className={`absolute left-[76px] top-0 z-20 h-full w-[240px] transform overflow-y-auto border-r border-gray2 bg-[#FBFBFB] px-[16px] pt-[64px] transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -82,7 +82,7 @@ export const Sidebar = ({
           ([label, chats]) =>
             chats.length > 0 && (
               <div key={label} className="mb-[32px]">
-                <h3 className="text-main mb-[12px] text-[12px] font-[600]">
+                <h3 className="mb-[12px] text-[12px] font-[600] text-main">
                   {label}
                 </h3>
                 <ul className="px-[12px]">

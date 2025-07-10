@@ -15,8 +15,10 @@ export const MessageItem = ({
 }: MessageItemProps) => {
   return (
     <div
-      className={`mb-[52px] w-fit rounded-[32px]  font-[500] text-black ${
-        message.role === 'user' ? 'ml-auto bg-[#FAF8F6] px-[20px] py-[12px]' : 'mr-auto'
+      className={`mb-[52px] w-fit rounded-[32px] font-[500] text-black ${
+        message.role === 'user'
+          ? 'ml-auto bg-[#FAF8F6] px-[20px] py-[12px]'
+          : 'mr-auto'
       }`}
     >
       {Array.isArray(message.content) ? (
@@ -29,10 +31,12 @@ export const MessageItem = ({
 
           {/* TODO: */}
           {isStreaming && message.role === 'assistant' && isLastMessage && (
-            <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
-              답변을 생성하는 중입니다
-              <span className="animate-bounce">...</span>
-            </p>
+            <div className="relative mx-auto mt-[86px] w-[720px]">
+              <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
+                답변을 생성하는 중입니다
+                <span className="animate-bounce">...</span>
+              </p>
+            </div>
           )}
         </>
       )}
