@@ -65,7 +65,7 @@ export const HomePage = () => {
       />
 
       <div
-        className={`ml-[76px] flex h-screen flex-1 flex-col items-center bg-blue-300 transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
+        className={`flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
       >
         {messages.length === 0 && (
           <div className="mb-[24px] text-center">
@@ -76,7 +76,7 @@ export const HomePage = () => {
         )}
 
         <div
-          className={`w-full max-w-[800px] bg-red-200 ${
+          className={`w-full max-w-[800px] ${
             messages.length === 0 ? '' : 'flex-1 overflow-y-auto'
           }`}
         >
@@ -95,7 +95,7 @@ export const HomePage = () => {
             className={`${
               messages.length === 0
                 ? 'flex items-center justify-center border-t'
-                : 'absolute bottom-0 left-0 w-full border-t bg-green-200 px-20 py-5'
+                : 'absolute bottom-0 left-0 w-full border-t py-5'
             }`}
           >
             <ChatInput

@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-bullet {
+    @apply w-[8px] h-[8px] bg-[#DBDEE0] rounded-full transition-all duration-300;
+}
+  
+.swiper-pagination-bullet-active.custom-bullet {
+    @apply bg-[#96989A] rounded-full;
+}
