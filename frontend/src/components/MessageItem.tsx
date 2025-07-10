@@ -1,6 +1,7 @@
 import { ChatMessage } from '@/api/chat';
 
 import { ChatbotResponseRenderer } from './ChatbotResponseRenderer';
+import { Loading } from './Loading';
 
 interface MessageItemProps {
   message: ChatMessage;
@@ -29,13 +30,9 @@ export const MessageItem = ({
           {/* 사용자의 질문 */}
           {message.content}
 
-          {/* TODO: */}
           {isStreaming && message.role === 'assistant' && isLastMessage && (
             <div className="relative mx-auto mt-[86px] w-[720px]">
-              <p className="mt-2 animate-pulse text-sm text-[#7C7266]">
-                답변을 생성하는 중입니다
-                <span className="animate-bounce">...</span>
-              </p>
+              <Loading />
             </div>
           )}
         </>
