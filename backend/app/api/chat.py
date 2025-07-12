@@ -25,33 +25,38 @@ async def chat(req: ChatRequest):
         completion = await client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{
-                "role": "system",
-                "content": "당신은 사용자의 첫 질문을 바탕으로 채팅의 제목을 생성하는 assistant입니다. 10글자 내외의 짧은 제목을 작성하세요."
+                "role":
+                    "system",
+                "content":
+                    "당신은 사용자의 첫 질문을 바탕으로 채팅의 제목을 생성하는 assistant입니다. 10글자 내외의 짧은 제목을 작성하세요."
             }, {
                 "role": "user",
                 "content": req.question
-            }]
-        )
+            }])
         title = completion.choices[0].message.content
 
     history = [{
-        "role": message.role,
-        "content": json.dumps([content.model_dump_json() for content in message.content])
-        if not isinstance(message.content, str) else message.content
+        "role":
+            message.role,
+        "content":
+            json.dumps([content.model_dump_json() for content in message.content])
+            if not isinstance(message.content, str) else message.content
     } for message in req.messages]
 
     answer = await assistant.pipeline_async(
         req.question,
-        history=history,                     #type: ignore
+        history=history,  #type: ignore
     )
 
-    messages = [*req.messages, {
-        "role": "user",
-        "content": req.question,
-    }, {
-        "role": "assistant",
-        "content": answer,
-    }]
+    messages = [
+        *req.messages, {
+            "role": "user",
+            "content": req.question,
+        }, {
+            "role": "assistant",
+            "content": answer,
+        }
+    ]
 
     return {
         "title": title,
