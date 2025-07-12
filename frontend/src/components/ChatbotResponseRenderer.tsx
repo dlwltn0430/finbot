@@ -1,3 +1,5 @@
+import ReactMarkdown from 'react-markdown';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -61,7 +63,8 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                 </div>
 
                 <div className="rounded-[8px] bg-[#F3F6F8] px-[12px] py-[20px] text-[16px] font-[400] leading-[24px] text-[#242525]">
-                  <p className="mb-[16px]">{product.details}</p>
+                  <ReactMarkdown>{product.details || ''}</ReactMarkdown>
+
                   {/* <p className="font-[700]">저축금액</p>
                   <p>
                     월 1천원 ~ 30만원(단, 신규금액만 0원이상) <br />※ 단,
