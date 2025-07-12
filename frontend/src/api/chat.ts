@@ -66,6 +66,11 @@ export interface SSEChatResponse {
   content: ChatContent | null;
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: ChatContent;
+}
+
 export const createChatStream = (
   body: ChatRequestBody,
   onMessage: (data: SSEChatResponse) => void

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { ChatContent } from '@/api/chat';
 import { ChatRequestBody, SSEChatResponse, createChatStream } from '@/api/chat';
