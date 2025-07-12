@@ -39,28 +39,28 @@
 // };
 
 // TODO: new
-interface ChatRequestBody {
+export interface ChatRequestBody {
   chat_id?: string | null;
   message: string;
 }
 
 type ChatStatus = 'pending' | 'response' | 'stop' | 'failed';
 
-interface ChatProduct {
+export interface ChatProduct {
   product_type: string | null;
   description: string | null;
-  company: string | null;
+  institution: string | null;
   details: string | null;
   tags: string[] | null;
   options: { category: string; value: string }[] | null;
 }
 
-interface ChatContent {
+export interface ChatContent {
   message?: string;
   products?: ChatProduct[];
 }
 
-interface SSEChatResponse {
+export interface SSEChatResponse {
   chat_id: string;
   status: ChatStatus;
   content: ChatContent | null;
