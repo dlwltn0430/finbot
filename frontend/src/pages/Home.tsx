@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { getChatHistory } from '@/utils/chatStorage';
+// import { getChatHistory } from '@/utils/chatStorage';
 
 import { useChat } from '@/hooks/useChat';
 
@@ -11,11 +11,11 @@ import { Sidebar } from '@/components/Sidebar';
 export const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const {
-    selectChat,
-    startNewChat,
+    //   selectChat,
+    //   startNewChat,
     isStreaming,
-    chatHistory,
-    setChatHistory,
+    //   chatHistory,
+    //   setChatHistory,
     messages,
     input,
     setInput,
@@ -32,20 +32,20 @@ export const HomePage = () => {
     }
   }, [messages]); // typingText 제외
 
-  useEffect(() => {
-    const history = getChatHistory();
-    setChatHistory(history);
-  }, [setChatHistory]); // setChatHistory를 의존성 배열에 추가
+  // useEffect(() => {
+  //   const history = getChatHistory();
+  //   setChatHistory(history);
+  // }, [setChatHistory]); // setChatHistory를 의존성 배열에 추가
 
-  useEffect(() => {
-    const history = getChatHistory();
-    if (history.length > 0) {
-      const last = history[history.length - 1];
-      selectChat(last.id, last.messages);
-    } else {
-      startNewChat();
-    }
-  }, []);
+  // useEffect(() => {
+  //   const history = getChatHistory();
+  //   if (history.length > 0) {
+  //     const last = history[history.length - 1];
+  //     selectChat(last.id, last.messages);
+  //   } else {
+  //     startNewChat();
+  //   }
+  // }, []);
 
   return (
     <div className="flex h-screen bg-white">
@@ -59,9 +59,12 @@ export const HomePage = () => {
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        startNewChat={startNewChat}
-        chatHistory={chatHistory}
-        onChatSelect={selectChat}
+        // startNewChat={startNewChat}
+        // chatHistory={chatHistory}
+        // onChatSelect={selectChat}
+        startNewChat={() => {}}
+        chatHistory={[]}
+        onChatSelect={() => {}}
       />
 
       <div
@@ -81,12 +84,7 @@ export const HomePage = () => {
           }`}
         >
           {messages.map((msg, i) => (
-            <MessageItem
-              key={i}
-              message={msg}
-              isStreaming={isStreaming}
-              isLastMessage={i === messages.length - 1}
-            />
+            <MessageItem key={i} chatMessage={msg} />
           ))}
 
           <div ref={bottomRef} />
