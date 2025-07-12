@@ -1,16 +1,20 @@
 import spinner from '@/assets/chat/spinner.svg';
 
-export const Loading = () => {
+interface PendingProps {
+  pendingMessage?: string;
+}
+
+export const PendingTaskLoader = ({ pendingMessage }: PendingProps) => {
   return (
     <div className="flex flex-col gap-[12px]">
       <div className="flex items-center gap-[8px]">
         <img
           src={spinner}
-          alt="로딩 중"
+          alt="pending"
           className="h-[24px] w-[24px] animate-spin"
         />
         <span className="text-gray6 text-[16px] font-[500]">
-          보도 자료 조회 중입니다 ...
+          {pendingMessage}
         </span>
       </div>
 

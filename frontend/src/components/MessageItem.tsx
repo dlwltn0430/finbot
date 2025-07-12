@@ -1,42 +1,39 @@
-import { ChatMessage } from '@/api/chat';
+import { ChatContent } from '@/api/chat';
 
 import { ChatbotResponseRenderer } from './ChatbotResponseRenderer';
-import { Loading } from './Loading';
+import { PendingTaskLoader } from './PendingTaskLoader';
 
-interface MessageItemProps {
-  message: ChatMessage;
-  isStreaming: boolean;
-  isLastMessage: boolean;
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: ChatContent;
 }
 
-export const MessageItem = ({
-  message,
-  isStreaming,
-  isLastMessage,
-}: MessageItemProps) => {
+interface MessageItemProps {
+  chatMessage: ChatMessage;
+}
+
+export const MessageItem = ({ chatMessage }: MessageItemProps) => {
+  const isUser = chatMessage.role === 'user';
+  const { message: textContent, products } = chatMessage.content || {};
+
   return (
     <div
       className={`mb-[52px] w-fit rounded-[32px] font-[500] text-black ${
-        message.role === 'user'
-          ? 'ml-auto bg-[#FAF8F6] px-[20px] py-[12px]'
-          : 'mr-auto'
+        isUser ? 'ml-auto bg-[#FAF8F6] px-[20px] py-[12px]' : 'mr-auto'
       }`}
     >
-      {Array.isArray(message.content) ? (
-        <ChatbotResponseRenderer />
-      ) : (
-        // <ChatbotResponseRenderer blocks={responseMock} /> // TODO: 챗봇의 답변
-        <>
-          {/* 사용자의 질문 */}
-          {message.content}
+      {/* 사용자 메시지 */}
+      {isUser && textContent}
 
-          {isStreaming && message.role === 'assistant' && isLastMessage && (
-            <div className="relative mx-auto mt-[86px] w-[720px]">
-              <Loading />
-            </div>
-          )}
-        </>
+      {/* 챗봇 메시지 - status: pending */}
+      {!isUser && !products && textContent?.endsWith('하고 있습니다.') && (
+        <div className="relative mx-auto mt-[86px] w-[720px]">
+          <PendingTaskLoader pendingMessage={textContent} />
+        </div>
       )}
+
+      {/* 챗봇 메시지 - status: response */}
+      {!isUser && products && <ChatbotResponseRenderer products={products} />}
     </div>
   );
 };
