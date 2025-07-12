@@ -1,19 +1,15 @@
-FROM python:3.12.3 AS build
+#FROM python:3.12.3 AS build
+FROM ghcr.io/astral-sh/uv:python3.12-alpine AS build
 
 WORKDIR /app
 
-RUN curl -sSL https://install.python-poetry.org | python3 - 
-ENV PATH="/root/.local/bin:$PATH"
-
 COPY . /app
-COPY pyproject.toml poetry.lock /app/
 
-RUN chmod +x /app/run.sh
+RUN uv venv --python 3.12
+RUN uv sync --all-groups
+RUN source ./.venv/bin/activate
 
-RUN \
-      poetry config virtualenvs.create false && \
-      poetry install --no-root --without dev
 
-EXPOSE 8088
+EXPOSE 8899
 
-CMD ["/app/run.sh"]
+CMD ["/app/.venv/bin/uvicorn", "app.main:app", "--port", "8899", "--host", "0.0.0.0"]
