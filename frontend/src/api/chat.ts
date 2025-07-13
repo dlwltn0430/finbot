@@ -77,7 +77,7 @@ export const createChatStream = (
 ) => {
   const controller = new AbortController();
 
-  fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/chats`, {
+  fetch(`/api/v1/chats`, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
