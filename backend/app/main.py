@@ -4,17 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.authorization import JWTAuthMiddleware
 from app.db import init_db
-from common.database import init_mongodb_client
 from fastapi.security.api_key import APIKeyHeader
 
 from app.api.v1 import router as v1_router
 
 
-def create_app(lifespan):
+def create_app():
     """FastAPI 인스턴스 생성 및 초기화"""
 
     auth_header = APIKeyHeader(name="Authorization", auto_error=False)
-    app = FastAPI(lifespan=lifespan, dependencies=[Depends(auth_header)])
+    #app = FastAPI(lifespan=lifespan, dependencies=[Depends(auth_header)])
+    app = FastAPI(dependencies=[Depends(auth_header)])
 
     app.include_router(v1_router.router, prefix="/api/v1")
 
@@ -46,4 +46,4 @@ async def lifespan(app: FastAPI):
     app.state.client.close()
 
 
-app = create_app(lifespan)
+app = create_app()
