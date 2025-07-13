@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { ChatContent } from '@/api/chat';
-import { ChatRequestBody, SSEChatResponse, createChatStream } from '@/api/chat';
+import { createChatStream } from '@/api/chat';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -159,47 +159,72 @@ export const useChat = () => {
 
   // TODO: new
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [pendingMessage, setPendingMessage] = useState<string | null>(null);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<(() => void) | null>(null);
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-
-    const newUserMessage: ChatMessage = {
+  const sendMessage = (input: string) => {
+    const newMessage: ChatMessage = {
       role: 'user',
       content: { message: input },
     };
 
-    setMessages((prev) => [...prev, newUserMessage]);
-    setInput('');
+    setMessages((prev) => [...prev, newMessage]);
     setIsStreaming(true);
 
-    const body: ChatRequestBody = {
-      chat_id: undefined, // 필요 시 마지막 chat_id를 전달
-      message: input,
-    };
+    abortRef.current = createChatStream({ message: input }, (data) => {
+      if (data.status === 'pending' && data.content?.message) {
+        setPendingMessage(data.content.message);
+      }
 
-    const abort = createChatStream(body, (data: SSEChatResponse) => {
-      if (!data.content) return;
+      if (data.status === 'response') {
+        setPendingMessage(null);
 
-      const assistantMessage: ChatMessage = {
-        role: 'assistant',
-        content: data.content,
-      };
+        setMessages((prev) => {
+          const last = prev.at(-1);
+          const isLastAssistant = last?.role === 'assistant';
 
-      setMessages((prev) => [...prev, assistantMessage]);
+          if (data.content?.products && !data.content?.message) {
+            return [
+              ...prev,
+              {
+                role: 'assistant',
+                content: { products: data.content.products },
+              },
+            ];
+          }
+
+          if (data.content?.message) {
+            if (isLastAssistant && last?.content.message !== undefined) {
+              return [
+                ...prev.slice(0, -1),
+                {
+                  role: 'assistant',
+                  content: {
+                    ...last.content,
+                    message:
+                      (last.content.message || '') + data.content.message,
+                  },
+                },
+              ];
+            }
+
+            return [
+              ...prev,
+              { role: 'assistant', content: { message: data.content.message } },
+            ];
+          }
+
+          return prev;
+        });
+      }
 
       if (data.status === 'stop') {
+        setPendingMessage(null);
         setIsStreaming(false);
-
-        if (abortRef.current) {
-          abortRef.current();
-        }
       }
     });
-
-    abortRef.current = abort;
   };
 
   const cancelStreamingResponse = () => {
@@ -210,16 +235,11 @@ export const useChat = () => {
   };
 
   return {
-    //     selectChat,
-    //     startNewChat,
-    isStreaming,
-    //     chatHistory,
-    //     setChatHistory,
-    //     typingText,
     messages,
+    pendingMessage,
+    isStreaming,
     input,
     setInput,
-    // currentChatId,
     sendMessage,
     cancelStreamingResponse,
   };

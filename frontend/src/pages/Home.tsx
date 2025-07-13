@@ -11,12 +11,9 @@ import { Sidebar } from '@/components/Sidebar';
 export const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const {
-    //   selectChat,
-    //   startNewChat,
-    isStreaming,
-    //   chatHistory,
-    //   setChatHistory,
     messages,
+    pendingMessage,
+    isStreaming,
     input,
     setInput,
     sendMessage,
@@ -68,7 +65,7 @@ export const HomePage = () => {
       />
 
       <div
-        className={`flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
+        className={`ml-[76px] flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
       >
         {messages.length === 0 && (
           <div className="mb-[24px] text-center">
@@ -83,9 +80,18 @@ export const HomePage = () => {
             messages.length === 0 ? '' : 'flex-1 overflow-y-auto'
           }`}
         >
-          {messages.map((msg, i) => (
-            <MessageItem key={i} chatMessage={msg} />
+          {messages.map((m, i) => (
+            <MessageItem key={i} chatMessage={m} />
           ))}
+
+          {pendingMessage && (
+            <MessageItem
+              chatMessage={{
+                role: 'assistant',
+                content: { message: pendingMessage },
+              }}
+            />
+          )}
 
           <div ref={bottomRef} />
 
