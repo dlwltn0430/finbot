@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 // import { getChatHistory } from '@/utils/chatStorage';
 
 import { useChat } from '@/hooks/useChat';
-
+import { useChatList } from '@/hooks/useChatList';
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
 import { Sidebar } from '@/components/Sidebar';
@@ -28,6 +28,8 @@ export const HomePage = () => {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]); // typingText 제외
+
+  const { data: chatListData } = useChatList();
 
   // useEffect(() => {
   //   const history = getChatHistory();
@@ -56,12 +58,16 @@ export const HomePage = () => {
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
+        chatHistory={(chatListData?.items ?? []).map((item) => ({
+          /// chatId: item.chat_id,
+          chat_id: item.chat_id,
+          title: item.title,
+          createdAt: new Date().toISOString(),
+        }))}
         // startNewChat={startNewChat}
-        // chatHistory={chatHistory}
         // onChatSelect={selectChat}
-        startNewChat={() => {}}
-        chatHistory={[]}
-        onChatSelect={() => {}}
+        startNewChat={() => {}} // TODO:
+        onChatSelect={() => {}} // TODO:
       />
 
       <div

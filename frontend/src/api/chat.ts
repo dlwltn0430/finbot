@@ -1,44 +1,6 @@
-// import { chatMock } from '@/mock/mock';
-// import axios from 'axios';
+import { fetchInstance } from './fetchInstance';
 
-// TODO: 삭제
-// export interface ChatMessage {
-//   role: 'user' | 'assistant' | string;
-//   content: string | ChatContent[];
-// }
-
-// export interface ChatContent {
-//   paragraph: string;
-//   urls: string[];
-// }
-
-// export interface ChatRequest {
-//   uuid: string;
-//   question: string;
-//   messages: ChatMessage[];
-// }
-
-// export interface ChatResponse {
-//   title: string | null;
-//   question: string;
-//   answer: ChatContent[];
-//   messages: ChatMessage[];
-// }
-
-// // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// const devMode = import.meta.env.DEV;
-
-// export const sendChatMessage = async (
-//   data: ChatRequest
-// ): Promise<ChatResponse> => {
-//   if (devMode) return chatMock;
-
-//   const response = await axios.post<ChatResponse>(`/api/chat`, data);
-//   // console.log(response.data);
-//   return response.data;
-// };
-
-// TODO: new
+// 대화 요청
 export interface ChatRequestBody {
   chat_id?: string | null;
   message: string;
@@ -120,3 +82,26 @@ export const createChatStream = (
     controller.abort();
   };
 };
+
+// 전체 대화 목록
+export interface ChatListItem {
+  title: string;
+  chat_id: string;
+}
+
+export interface ChatListResponse {
+  size: number;
+  offset: number;
+  items: ChatListItem[];
+}
+
+export const getChatList = async (
+  offset = 0,
+  size = 20
+): Promise<ChatListResponse> => {
+  return await fetchInstance.get('/api/v1/chats', {
+    params: { offset, size },
+  });
+};
+
+// 상세 대화 내역

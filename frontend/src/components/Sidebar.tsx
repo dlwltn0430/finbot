@@ -1,4 +1,4 @@
-import { ChatHistoryItem } from '@/utils/chatStorage';
+import { ChatSidebarItem } from '@/utils/chatStorage';
 
 import { ChatMessage } from '@/api/chat';
 
@@ -11,7 +11,7 @@ interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
   startNewChat: () => void;
-  chatHistory: ChatHistoryItem[];
+  chatHistory: ChatSidebarItem[];
   onChatSelect: (chatId: string, messages: ChatMessage[]) => void;
 }
 
@@ -20,7 +20,7 @@ export const Sidebar = ({
   toggleSidebar,
   startNewChat,
   chatHistory,
-  onChatSelect,
+  // onChatSelect,
 }: SidebarProps) => {
   const formatDateLabel = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -37,7 +37,7 @@ export const Sidebar = ({
     return '이전';
   };
 
-  const groupChatsByDate = (chats: ChatHistoryItem[]) =>
+  const groupChatsByDate = (chats: ChatSidebarItem[]) =>
     chats.reduce(
       (acc, chat) => {
         const label = formatDateLabel(chat.createdAt);
@@ -45,7 +45,7 @@ export const Sidebar = ({
         acc[label].push(chat);
         return acc;
       },
-      {} as Record<string, ChatHistoryItem[]>
+      {} as Record<string, ChatSidebarItem[]>
     );
 
   return (
@@ -88,9 +88,9 @@ export const Sidebar = ({
                 <ul className="px-[12px]">
                   {chats.map((chat) => (
                     <li
-                      key={chat.id}
+                      // key={chat.id}
                       className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525]"
-                      onClick={() => onChatSelect(chat.id, chat.messages)}
+                      // onClick={() => onChatSelect(chat.id, chat.messages)}
                     >
                       {chat.title || '새로운 대화'}
                     </li>
