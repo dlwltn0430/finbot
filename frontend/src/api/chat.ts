@@ -1,63 +1,31 @@
-// import { chatMock } from '@/mock/mock';
-// import axios from 'axios';
+import { useChatListStore } from '@/stores/chatListStore';
+import { fetchInstance } from './fetchInstance';
 
-// TODO: 삭제
-// export interface ChatMessage {
-//   role: 'user' | 'assistant' | string;
-//   content: string | ChatContent[];
-// }
-
-// export interface ChatContent {
-//   paragraph: string;
-//   urls: string[];
-// }
-
-// export interface ChatRequest {
-//   uuid: string;
-//   question: string;
-//   messages: ChatMessage[];
-// }
-
-// export interface ChatResponse {
-//   title: string | null;
-//   question: string;
-//   answer: ChatContent[];
-//   messages: ChatMessage[];
-// }
-
-// // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// const devMode = import.meta.env.DEV;
-
-// export const sendChatMessage = async (
-//   data: ChatRequest
-// ): Promise<ChatResponse> => {
-//   if (devMode) return chatMock;
-
-//   const response = await axios.post<ChatResponse>(`/api/chat`, data);
-//   // console.log(response.data);
-//   return response.data;
-// };
-
-// TODO: new
+// 대화 요청
 export interface ChatRequestBody {
   chat_id?: string | null;
   message: string;
 }
 
-type ChatStatus = 'pending' | 'response' | 'stop' | 'failed';
+type ChatStatus = 'pending' | 'title' | 'response' | 'stop' | 'failed';
 
-export interface ChatProduct {
+export interface ProductOption {
+  category: string;
+  value: string;
+}
+
+export interface Product {
   product_type: string | null;
   description: string | null;
   institution: string | null;
   details: string | null;
   tags: string[] | null;
-  options: { category: string; value: string }[] | null;
+  options: ProductOption[] | null;
 }
 
 export interface ChatContent {
   message?: string;
-  products?: ChatProduct[];
+  products?: Product[];
 }
 
 export interface SSEChatResponse {
@@ -66,18 +34,13 @@ export interface SSEChatResponse {
   content: ChatContent | null;
 }
 
-export interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: ChatContent;
-}
-
 export const createChatStream = (
   body: ChatRequestBody,
   onMessage: (data: SSEChatResponse) => void
 ) => {
   const controller = new AbortController();
 
-  fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/chats`, {
+  fetch(`/api/v1/chats`, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
@@ -108,6 +71,12 @@ export const createChatStream = (
           try {
             const parsed: SSEChatResponse = JSON.parse(jsonString);
             onMessage(parsed);
+
+            if (parsed.status === 'title' && parsed.content?.message) {
+              useChatListStore
+                .getState()
+                .updateTitle(parsed.chat_id, parsed.content.message);
+            }
           } catch (err) {
             console.error('파싱 오류', err);
           }
@@ -119,4 +88,48 @@ export const createChatStream = (
   return () => {
     controller.abort();
   };
+};
+
+// 전체 대화 목록
+export interface ChatListItem {
+  title: string;
+  chat_id: string;
+}
+
+export interface ChatListResponse {
+  size: number;
+  offset: number;
+  items: ChatListItem[];
+}
+
+export const getChatList = async (
+  offset = 0,
+  size = 20
+): Promise<ChatListResponse> => {
+  return await fetchInstance.get('/api/v1/chats', {
+    params: { offset, size },
+  });
+};
+
+// 상세 대화 내역
+export interface ChatDetailItem {
+  role: 'user' | 'assistant';
+  content: ChatContent;
+}
+
+export interface ChatDetailResponse {
+  size: number;
+  offset: number;
+  chat_id: string;
+  items: ChatDetailItem[];
+}
+
+export const getChatDetail = async (
+  chatId: string,
+  offset = 0,
+  size = 10
+): Promise<ChatDetailResponse> => {
+  return await fetchInstance.get(`/api/v1/chats/${chatId}`, {
+    params: { offset, size },
+  });
 };

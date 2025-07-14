@@ -6,13 +6,13 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ChatProduct } from '@/api/chat';
+import { Product } from '@/api/chat';
 
 import leftArrow from '@/assets/chat/left-arrow.svg';
 import rightArrow from '@/assets/chat/right-arrow.svg';
 
 interface ProductProps {
-  products: ChatProduct[];
+  products: Product[];
 }
 
 export const ChatbotResponseRenderer = ({ products }: ProductProps) => {

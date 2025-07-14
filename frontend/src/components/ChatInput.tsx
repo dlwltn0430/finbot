@@ -10,7 +10,7 @@ interface ChatInputProps {
   input: string;
   setInput: (value: string) => void;
   isStreaming: boolean;
-  onSend: () => void;
+  onSend: (input: string) => void;
   onCancel: () => void;
 }
 
@@ -40,7 +40,7 @@ export const ChatInput = ({
       if (isStreaming) return;
 
       if (!isStreaming && input.trim()) {
-        onSend();
+        onSend(input);
       }
     }
   };
@@ -58,7 +58,7 @@ export const ChatInput = ({
       />
 
       <button
-        onClick={isStreaming ? onCancel : onSend}
+        onClick={isStreaming ? onCancel : () => onSend(input)}
         onMouseEnter={() => setIsSendOrStopHovered(true)}
         onMouseLeave={() => setIsSendOrStopHovered(false)}
         className="absolute bottom-8 right-6 items-center justify-center"

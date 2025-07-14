@@ -1,27 +1,51 @@
 import { useEffect, useRef, useState } from 'react';
-
-// import { getChatHistory } from '@/utils/chatStorage';
-
+import { useChatListStore } from '@/stores/chatListStore';
 import { useChat } from '@/hooks/useChat';
-
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
 import { Sidebar } from '@/components/Sidebar';
+import { useChatList } from '@/hooks/useChatList';
+import { useParams } from 'react-router-dom';
+import { getChatDetail } from '@/api/chat';
 
 export const HomePage = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { data: chatListData } = useChatList();
+  const setChatList = useChatListStore((state) => state.setChatList);
+
+  useEffect(() => {
+    if (chatListData?.items) {
+      setChatList(
+        chatListData.items.map((item) => ({
+          ...item,
+          createdAt: new Date().toISOString(),
+        }))
+      );
+    }
+  }, [chatListData, setChatList]);
+
+  const { chatId } = useParams();
   const {
-    //   selectChat,
-    //   startNewChat,
-    isStreaming,
-    //   chatHistory,
-    //   setChatHistory,
     messages,
+    pendingMessage,
+    isStreaming,
     input,
+    setMessages,
     setInput,
     sendMessage,
     cancelStreamingResponse,
   } = useChat();
+
+  useEffect(() => {
+    if (chatId) {
+      (async () => {
+        const { items } = await getChatDetail(chatId);
+        setMessages(items);
+        console.log(items);
+      })();
+    }
+  }, [chatId, setMessages]);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -30,22 +54,7 @@ export const HomePage = () => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]); // typingText 제외
-
-  // useEffect(() => {
-  //   const history = getChatHistory();
-  //   setChatHistory(history);
-  // }, [setChatHistory]); // setChatHistory를 의존성 배열에 추가
-
-  // useEffect(() => {
-  //   const history = getChatHistory();
-  //   if (history.length > 0) {
-  //     const last = history[history.length - 1];
-  //     selectChat(last.id, last.messages);
-  //   } else {
-  //     startNewChat();
-  //   }
-  // }, []);
+  }, [messages]);
 
   return (
     <div className="flex h-screen bg-white">
@@ -56,19 +65,10 @@ export const HomePage = () => {
         </span>
       </div>
 
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        // startNewChat={startNewChat}
-        // chatHistory={chatHistory}
-        // onChatSelect={selectChat}
-        startNewChat={() => {}}
-        chatHistory={[]}
-        onChatSelect={() => {}}
-      />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <div
-        className={`flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
+        className={`ml-[76px] flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
       >
         {messages.length === 0 && (
           <div className="mb-[24px] text-center">
@@ -83,9 +83,18 @@ export const HomePage = () => {
             messages.length === 0 ? '' : 'flex-1 overflow-y-auto'
           }`}
         >
-          {messages.map((msg, i) => (
-            <MessageItem key={i} chatMessage={msg} />
+          {messages.map((m, i) => (
+            <MessageItem key={i} chatMessage={m} />
           ))}
+
+          {pendingMessage && (
+            <MessageItem
+              chatMessage={{
+                role: 'assistant',
+                content: { message: pendingMessage },
+              }}
+            />
+          )}
 
           <div ref={bottomRef} />
 
