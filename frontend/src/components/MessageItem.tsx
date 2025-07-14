@@ -1,16 +1,11 @@
-import { ChatContent } from '@/api/chat';
+import { ChatDetailItem } from '@/api/chat';
 import ReactMarkdown from 'react-markdown';
 
 import { ChatbotResponseRenderer } from './ChatbotResponseRenderer';
 import { PendingTaskLoader } from './PendingTaskLoader';
 
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: ChatContent;
-}
-
 interface MessageItemProps {
-  chatMessage: ChatMessage;
+  chatMessage: ChatDetailItem;
 }
 
 export const MessageItem = ({ chatMessage }: MessageItemProps) => {

@@ -1,12 +1,12 @@
 // import { v4 as uuidv4 } from 'uuid';
 
-import { ChatMessage } from '@/api/chat';
+import { ChatDetailItem } from '@/api/chat';
 
 // TODO:
 export interface ChatHistoryItem {
   chat_id: string;
   title: string;
-  messages: ChatMessage[];
+  messages: ChatDetailItem[];
   createdAt: string;
 }
 
