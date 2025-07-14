@@ -1,17 +1,16 @@
-import { ChatSidebarItem } from '@/utils/chatStorage';
-
 import { ChatDetailItem } from '@/api/chat';
 
 import logo from '@/assets/sidebar/logo.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
 import policyIcon from '@/assets/sidebar/policy.svg';
 import prevIcon from '@/assets/sidebar/prev.svg';
+import { useChatListStore } from '@/stores/chatListStore';
+import { ChatSidebarItem } from '@/utils/chatStorage';
 
 interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
   startNewChat: () => void;
-  chatHistory: ChatSidebarItem[];
   onChatSelect: (chatId: string, messages: ChatDetailItem[]) => void;
 }
 
@@ -19,9 +18,10 @@ export const Sidebar = ({
   isSidebarOpen,
   toggleSidebar,
   startNewChat,
-  chatHistory,
   // onChatSelect,
 }: SidebarProps) => {
+  const chatList = useChatListStore((state) => state.chatList);
+
   const formatDateLabel = (dateStr: string) => {
     const date = new Date(dateStr);
     const today = new Date();
@@ -78,7 +78,7 @@ export const Sidebar = ({
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {Object.entries(groupChatsByDate([...chatHistory].reverse())).map(
+        {Object.entries(groupChatsByDate([...chatList])).map(
           ([label, chats]) =>
             chats.length > 0 && (
               <div key={label} className="mb-[32px]">
@@ -88,7 +88,7 @@ export const Sidebar = ({
                 <ul className="px-[12px]">
                   {chats.map((chat) => (
                     <li
-                      // key={chat.id}
+                      key={chat.chat_id}
                       className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525]"
                       // onClick={() => onChatSelect(chat.id, chat.messages)}
                     >

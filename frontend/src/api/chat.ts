@@ -1,3 +1,4 @@
+import { useChatListStore } from '@/stores/chatListStore';
 import { fetchInstance } from './fetchInstance';
 
 // 대화 요청
@@ -6,7 +7,7 @@ export interface ChatRequestBody {
   message: string;
 }
 
-type ChatStatus = 'pending' | 'response' | 'stop' | 'failed';
+type ChatStatus = 'pending' | 'title' | 'response' | 'stop' | 'failed';
 
 export interface ProductOption {
   category: string;
@@ -70,6 +71,12 @@ export const createChatStream = (
           try {
             const parsed: SSEChatResponse = JSON.parse(jsonString);
             onMessage(parsed);
+
+            if (parsed.status === 'title' && parsed.content?.message) {
+              useChatListStore
+                .getState()
+                .updateTitle(parsed.chat_id, parsed.content.message);
+            }
           } catch (err) {
             console.error('파싱 오류', err);
           }

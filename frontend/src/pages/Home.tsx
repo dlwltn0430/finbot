@@ -1,14 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
-
+import { useChatListStore } from '@/stores/chatListStore';
 // import { getChatHistory } from '@/utils/chatStorage';
 
 import { useChat } from '@/hooks/useChat';
-import { useChatList } from '@/hooks/useChatList';
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
 import { Sidebar } from '@/components/Sidebar';
+import { useChatList } from '@/hooks/useChatList';
 
 export const HomePage = () => {
+  const { data: chatListData } = useChatList();
+  const setChatList = useChatListStore((state) => state.setChatList);
+
+  useEffect(() => {
+    if (chatListData?.items) {
+      setChatList(
+        chatListData.items.map((item) => ({
+          ...item,
+          createdAt: new Date().toISOString(),
+        }))
+      );
+    }
+  }, [chatListData, setChatList]);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const {
     messages,
@@ -29,7 +43,7 @@ export const HomePage = () => {
     }
   }, [messages]); // typingText 제외
 
-  const { data: chatListData } = useChatList();
+  // const { data: chatListData } = useChatList();
 
   // useEffect(() => {
   //   const history = getChatHistory();
@@ -58,12 +72,12 @@ export const HomePage = () => {
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        chatHistory={(chatListData?.items ?? []).map((item) => ({
-          /// chatId: item.chat_id,
-          chat_id: item.chat_id,
-          title: item.title,
-          createdAt: new Date().toISOString(),
-        }))}
+        // chatHistory={(chatListData?.items ?? []).map((item) => ({
+        //   /// chatId: item.chat_id,
+        //   chat_id: item.chat_id,
+        //   title: item.title,
+        //   createdAt: new Date().toISOString(),
+        // }))}
         // startNewChat={startNewChat}
         // onChatSelect={selectChat}
         startNewChat={() => {}} // TODO:
