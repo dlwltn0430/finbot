@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useChatListStore } from '@/stores/chatListStore';
-// import { getChatHistory } from '@/utils/chatStorage';
-
 import { useChat } from '@/hooks/useChat';
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
 import { Sidebar } from '@/components/Sidebar';
 import { useChatList } from '@/hooks/useChatList';
+import { useParams } from 'react-router-dom';
+import { getChatDetail } from '@/api/chat';
 
 export const HomePage = () => {
   const { data: chatListData } = useChatList();
@@ -23,16 +23,29 @@ export const HomePage = () => {
     }
   }, [chatListData, setChatList]);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { chatId } = useParams();
   const {
     messages,
     pendingMessage,
     isStreaming,
     input,
+    setMessages,
     setInput,
     sendMessage,
     cancelStreamingResponse,
   } = useChat();
+
+  useEffect(() => {
+    if (chatId) {
+      (async () => {
+        const { items } = await getChatDetail(chatId);
+        setMessages(items);
+        console.log(items);
+      })();
+    }
+  }, [chatId, setMessages]);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -41,24 +54,7 @@ export const HomePage = () => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]); // typingText 제외
-
-  // const { data: chatListData } = useChatList();
-
-  // useEffect(() => {
-  //   const history = getChatHistory();
-  //   setChatHistory(history);
-  // }, [setChatHistory]); // setChatHistory를 의존성 배열에 추가
-
-  // useEffect(() => {
-  //   const history = getChatHistory();
-  //   if (history.length > 0) {
-  //     const last = history[history.length - 1];
-  //     selectChat(last.id, last.messages);
-  //   } else {
-  //     startNewChat();
-  //   }
-  // }, []);
+  }, [messages]);
 
   return (
     <div className="flex h-screen bg-white">
@@ -69,20 +65,7 @@ export const HomePage = () => {
         </span>
       </div>
 
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        // chatHistory={(chatListData?.items ?? []).map((item) => ({
-        //   /// chatId: item.chat_id,
-        //   chat_id: item.chat_id,
-        //   title: item.title,
-        //   createdAt: new Date().toISOString(),
-        // }))}
-        // startNewChat={startNewChat}
-        // onChatSelect={selectChat}
-        startNewChat={() => {}} // TODO:
-        onChatSelect={() => {}} // TODO:
-      />
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <div
         className={`ml-[76px] flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
