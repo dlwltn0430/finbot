@@ -46,7 +46,7 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                   {product.description}
                 </p>
                 <div className="flex items-center gap-[4px] text-[32px] font-[600] text-[#242525]">
-                  {product.product_type}
+                  {product.name}
                 </div>
                 <p className="mb-[24px] mt-[4px] text-[16px] font-[500] text-[#515354]">
                   {product.institution}

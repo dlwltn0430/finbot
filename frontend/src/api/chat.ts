@@ -15,6 +15,7 @@ export interface ProductOption {
 }
 
 export interface Product {
+  name: string | null;
   product_type: string | null;
   description: string | null;
   institution: string | null;
