@@ -1,25 +1,18 @@
-import { ChatDetailItem } from '@/api/chat';
-
 import logo from '@/assets/sidebar/logo.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
 import policyIcon from '@/assets/sidebar/policy.svg';
 import prevIcon from '@/assets/sidebar/prev.svg';
+import { useChat } from '@/hooks/useChat';
 import { useChatListStore } from '@/stores/chatListStore';
 import { ChatSidebarItem } from '@/utils/chatStorage';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
-  startNewChat: () => void;
-  onChatSelect: (chatId: string, messages: ChatDetailItem[]) => void;
 }
 
-export const Sidebar = ({
-  isSidebarOpen,
-  toggleSidebar,
-  startNewChat,
-  // onChatSelect,
-}: SidebarProps) => {
+export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
   const chatList = useChatListStore((state) => state.chatList);
 
   const formatDateLabel = (dateStr: string) => {
@@ -48,6 +41,13 @@ export const Sidebar = ({
       {} as Record<string, ChatSidebarItem[]>
     );
 
+  const navigate = useNavigate();
+  const { setMessages } = useChat();
+
+  const navigateToChatDetail = (chatId: string) => {
+    navigate(`/chat/${chatId}`);
+  };
+
   return (
     <div>
       {/* 접힌 상태 */}
@@ -67,7 +67,12 @@ export const Sidebar = ({
           </div>
         </div>
 
-        <button onClick={startNewChat}>
+        <button
+          onClick={() => {
+            setMessages([]);
+            navigate('/');
+          }}
+        >
           <img src={newChat} alt="new" className="w-[40px]" />
         </button>
       </div>
@@ -90,7 +95,7 @@ export const Sidebar = ({
                     <li
                       key={chat.chat_id}
                       className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525]"
-                      // onClick={() => onChatSelect(chat.id, chat.messages)}
+                      onClick={() => navigateToChatDetail(chat.chat_id)}
                     >
                       {chat.title || '새로운 대화'}
                     </li>

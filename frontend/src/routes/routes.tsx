@@ -14,6 +14,10 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
+    path: RouterPath.CHAT_DETAIL,
+    element: <HomePage />,
+  },
+  {
     path: RouterPath.NOT_FOUND,
     element: <Navigate to={RouterPath.HOME} />,
   },
