@@ -1,6 +1,6 @@
 import { ChatSidebarItem } from '@/utils/chatStorage';
 
-import { ChatMessage } from '@/api/chat';
+import { ChatDetailItem } from '@/api/chat';
 
 import logo from '@/assets/sidebar/logo.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
@@ -12,7 +12,7 @@ interface SidebarProps {
   toggleSidebar: () => void;
   startNewChat: () => void;
   chatHistory: ChatSidebarItem[];
-  onChatSelect: (chatId: string, messages: ChatMessage[]) => void;
+  onChatSelect: (chatId: string, messages: ChatDetailItem[]) => void;
 }
 
 export const Sidebar = ({

@@ -8,29 +8,29 @@ export interface ChatRequestBody {
 
 type ChatStatus = 'pending' | 'response' | 'stop' | 'failed';
 
-export interface ChatProduct {
+export interface ProductOption {
+  category: string;
+  value: string;
+}
+
+export interface Product {
   product_type: string | null;
   description: string | null;
   institution: string | null;
   details: string | null;
   tags: string[] | null;
-  options: { category: string; value: string }[] | null;
+  options: ProductOption[] | null;
 }
 
 export interface ChatContent {
   message?: string;
-  products?: ChatProduct[];
+  products?: Product[];
 }
 
 export interface SSEChatResponse {
   chat_id: string;
   status: ChatStatus;
   content: ChatContent | null;
-}
-
-export interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: ChatContent;
 }
 
 export const createChatStream = (
@@ -105,3 +105,24 @@ export const getChatList = async (
 };
 
 // 상세 대화 내역
+export interface ChatDetailItem {
+  role: 'user' | 'assistant';
+  content: ChatContent;
+}
+
+export interface ChatDetailResponse {
+  size: number;
+  offset: number;
+  chat_id: string;
+  items: ChatDetailItem[];
+}
+
+export const getChatDetail = async (
+  chatId: string,
+  offset = 0,
+  size = 10
+): Promise<ChatDetailResponse> => {
+  return await fetchInstance.get(`/api/v1/chats/${chatId}`, {
+    params: { offset, size },
+  });
+};

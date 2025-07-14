@@ -1,12 +1,7 @@
 import { useRef, useState } from 'react';
 
-import { ChatContent } from '@/api/chat';
+import { ChatDetailItem } from '@/api/chat';
 import { createChatStream } from '@/api/chat';
-
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: ChatContent;
-}
 
 // import { v4 as uuidv4 } from 'uuid';
 // import {
@@ -158,14 +153,14 @@ export const useChat = () => {
   //   }, [isStreaming, typingText, completeResponse, lastResponse, currentChatId]);
 
   // TODO: new
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatDetailItem[]>([]);
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<(() => void) | null>(null);
 
   const sendMessage = (input: string) => {
-    const newMessage: ChatMessage = {
+    const newMessage: ChatDetailItem = {
       role: 'user',
       content: { message: input },
     };
