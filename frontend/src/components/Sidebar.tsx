@@ -48,13 +48,6 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
     navigate(`/chat/${chatId}`);
   };
 
-  const navigate = useNavigate();
-  const { setMessages } = useChat();
-
-  const navigateToChatDetail = (chatId: string) => {
-    navigate(`/chat/${chatId}`);
-  };
-
   return (
     <div>
       {/* 접힌 상태 */}
