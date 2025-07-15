@@ -95,6 +95,7 @@ export const createChatStream = (
 export interface ChatListItem {
   title: string;
   chat_id: string;
+  updated_at: string;
 }
 
 export interface ChatListResponse {
