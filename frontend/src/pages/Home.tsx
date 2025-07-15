@@ -14,12 +14,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     if (chatListData?.items) {
-      setChatList(
-        chatListData.items.map((item) => ({
-          ...item,
-          createdAt: new Date().toISOString(),
-        }))
-      );
+      setChatList(chatListData.items);
     }
   }, [chatListData, setChatList]);
 

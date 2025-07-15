@@ -1,23 +1,18 @@
-import { ChatSidebarItem } from '@/utils/chatStorage';
+import { ChatListItem } from '@/api/chat';
 import { create } from 'zustand';
 
 interface ChatListState {
-  chatList: ChatSidebarItem[];
-  setChatList: (list: ChatSidebarItem[]) => void;
-  updateTitle: (chat_id: string, title: string) => void;
+  chatList: ChatListItem[];
+  setChatList: (list: ChatListItem[]) => void;
+  updateTitle: (chat_id: string, title: string, updated_at?: string) => void;
 }
 
 export const useChatListStore = create<ChatListState>((set) => ({
   chatList: [],
   setChatList: (newList) => {
-    set({
-      chatList: newList.map((item) => ({
-        ...item,
-        createdAt: new Date().toISOString(),
-      })),
-    });
+    set({ chatList: newList });
   },
-  updateTitle: (chat_id, title) =>
+  updateTitle: (chat_id, title, updated_at?) =>
     set((state) => {
       const updated = [...state.chatList];
       const index = updated.findIndex((item) => item.chat_id === chat_id);
@@ -28,7 +23,7 @@ export const useChatListStore = create<ChatListState>((set) => ({
         updated.unshift({
           chat_id,
           title,
-          createdAt: new Date().toISOString(),
+          updated_at: updated_at ?? new Date().toISOString(),
         });
       }
 

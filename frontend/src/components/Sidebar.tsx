@@ -1,9 +1,9 @@
+import { ChatListItem } from '@/api/chat';
 import logo from '@/assets/sidebar/logo.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
 import policyIcon from '@/assets/sidebar/policy.svg';
 import prevIcon from '@/assets/sidebar/prev.svg';
 import { useChatListStore } from '@/stores/chatListStore';
-import { ChatSidebarItem } from '@/utils/chatStorage';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
@@ -14,30 +14,42 @@ interface SidebarProps {
 export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
   const chatList = useChatListStore((state) => state.chatList);
 
-  const formatDateLabel = (dateStr: string) => {
-    const date = new Date(dateStr);
+  const formatDateLabel = (updatedAt: string) => {
+    const formatToYMD = (date: Date) =>
+      date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+
+    const date = new Date(updatedAt);
     const today = new Date();
     const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
     const oneWeekAgo = new Date(today);
+
+    yesterday.setDate(today.getDate() - 1);
     oneWeekAgo.setDate(today.getDate() - 7);
 
-    if (date.toDateString() === today.toDateString()) return '오늘';
-    if (date.toDateString() === yesterday.toDateString()) return '어제';
+    const dateYMD = formatToYMD(date);
+    const todayYMD = formatToYMD(today);
+    const yesterdayYMD = formatToYMD(yesterday);
+
+    if (dateYMD === todayYMD) return '오늘';
+    if (dateYMD === yesterdayYMD) return '어제';
     if (date > oneWeekAgo) return '지난 7일';
 
     return '이전';
   };
 
-  const groupChatsByDate = (chats: ChatSidebarItem[]) =>
+  const groupChatsByDate = (chats: ChatListItem[]) =>
     chats.reduce(
       (acc, chat) => {
-        const label = formatDateLabel(chat.createdAt);
+        const label = formatDateLabel(chat.updated_at);
         if (!acc[label]) acc[label] = [];
         acc[label].push(chat);
         return acc;
       },
-      {} as Record<string, ChatSidebarItem[]>
+      {} as Record<string, ChatListItem[]>
     );
 
   const navigate = useNavigate();
