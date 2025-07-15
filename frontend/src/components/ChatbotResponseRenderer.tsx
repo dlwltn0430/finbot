@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-
+import { institutionImages } from '@/constants/institutionImages';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -46,6 +46,14 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                   {product.description}
                 </p>
                 <div className="flex items-center gap-[4px] text-[32px] font-[600] text-[#242525]">
+                  <img
+                    src={
+                      product.institution
+                        ? institutionImages[product.institution]
+                        : institutionImages['default']
+                    }
+                    className="h-[40px] w-[40px]"
+                  />
                   {product.name}
                 </div>
                 <p className="mb-[24px] mt-[4px] text-[16px] font-[500] text-[#515354]">
@@ -91,18 +99,6 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
           <div className="custom-pagination mt-[32px] flex justify-center gap-[8px]" />
         </Swiper>
       </div>
-
-      {/* <div className="mx-auto mt-[40px] w-[720px] text-[16px] font-[400] leading-[24px] text-[#242525]">
-        여러 조건을 고려하였을 때, KB장병내일준비적금을 가장 추천드립니다.{' '}
-        <br />
-        이유 1. 업계 최고 수준의 우대금리 제공 <br />
-        이유 2. 비대면 가입 전 과정 지원 <br />
-        🎯 당신에게 특히 추천하는 이유 <br />
-        빠르게 목돈을 마련하고 싶은 당신을 위해, 높은 금리의 상품을 우선적으로
-        고려했습니다. <br />
-        GOP 부대 특성상 외출이 제한적일 수 있으므로 비대면 가입 여부 또한
-        중요하게 판단했습니다.
-      </div> */}
     </div>
   );
 };
