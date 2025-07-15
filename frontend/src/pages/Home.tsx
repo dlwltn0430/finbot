@@ -35,7 +35,6 @@ export const HomePage = () => {
       (async () => {
         const { items } = await getChatDetail(chatId);
         setMessages(items);
-        console.log(items);
       })();
     } else {
       setMessages([]);
