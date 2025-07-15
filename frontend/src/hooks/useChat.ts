@@ -18,6 +18,7 @@ export const useChat = () => {
 
     setMessages((prev) => [...prev, newMessage]);
     setIsStreaming(true);
+    setInput('');
 
     abortRef.current = createChatStream({ message: input }, (data) => {
       if (data.status === 'pending' && data.content?.message) {
