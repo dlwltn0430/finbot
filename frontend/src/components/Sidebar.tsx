@@ -2,7 +2,6 @@ import logo from '@/assets/sidebar/logo.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
 import policyIcon from '@/assets/sidebar/policy.svg';
 import prevIcon from '@/assets/sidebar/prev.svg';
-import { useChat } from '@/hooks/useChat';
 import { useChatListStore } from '@/stores/chatListStore';
 import { ChatSidebarItem } from '@/utils/chatStorage';
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +41,6 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
     );
 
   const navigate = useNavigate();
-  const { setMessages } = useChat();
 
   const navigateToChatDetail = (chatId: string) => {
     navigate(`/chat/${chatId}`);
@@ -69,7 +67,7 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
 
         <button
           onClick={() => {
-            setMessages([]);
+            // setMessages([]);
             navigate('/');
           }}
         >

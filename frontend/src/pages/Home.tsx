@@ -42,6 +42,8 @@ export const HomePage = () => {
         setMessages(items);
         console.log(items);
       })();
+    } else {
+      setMessages([]);
     }
   }, [chatId, setMessages]);
 
