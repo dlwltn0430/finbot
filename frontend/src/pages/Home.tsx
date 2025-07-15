@@ -111,7 +111,7 @@ export const HomePage = () => {
               input={input}
               setInput={setInput}
               isStreaming={isStreaming}
-              onSend={sendMessage}
+              onSend={() => sendMessage(input, chatId)}
               onCancel={cancelStreamingResponse}
             />
           </div>
