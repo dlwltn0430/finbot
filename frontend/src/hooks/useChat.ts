@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { ChatDetailItem } from '@/api/chat';
 import { createChatStream } from '@/api/chat';
 
@@ -9,6 +9,8 @@ export const useChat = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [input, setInput] = useState('');
   const abortRef = useRef<(() => void) | null>(null);
+  const navigate = useNavigate();
+  const chatIdRef = useRef<string | null>(null);
 
   const sendMessage = (input: string) => {
     const newMessage: ChatDetailItem = {
@@ -21,6 +23,11 @@ export const useChat = () => {
     setInput('');
 
     abortRef.current = createChatStream({ message: input }, (data) => {
+      if (!chatIdRef.current && data.chat_id) {
+        chatIdRef.current = data.chat_id;
+        navigate(`/chat/${data.chat_id}`);
+      }
+
       if (data.status === 'pending' && data.content?.message) {
         setPendingMessage(data.content.message);
       }
@@ -65,6 +72,7 @@ export const useChat = () => {
       if (data.status === 'stop') {
         setPendingMessage(null);
         setIsStreaming(false);
+        chatIdRef.current = null;
       }
     });
   };
