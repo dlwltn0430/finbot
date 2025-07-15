@@ -1,5 +1,6 @@
 import { useChatListStore } from '@/stores/chatListStore';
 import { fetchInstance } from './fetchInstance';
+import { useChatProductStore } from '@/stores/chatProductStore';
 
 // 대화 요청
 export interface ChatRequestBody {
@@ -72,6 +73,16 @@ export const createChatStream = (
           try {
             const parsed: SSEChatResponse = JSON.parse(jsonString);
             onMessage(parsed);
+
+            if (parsed.status === 'pending') {
+              if (parsed.content?.products) {
+                useChatProductStore
+                  .getState()
+                  .setProducts(parsed.content.products);
+              } else {
+                useChatProductStore.getState().setProducts(null);
+              }
+            }
 
             if (parsed.status === 'title' && parsed.content?.message) {
               useChatListStore
