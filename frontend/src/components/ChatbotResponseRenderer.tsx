@@ -88,7 +88,7 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                       key={i}
                       className="rounded-[24px] border border-main bg-[#FCFCFC] px-[12px] py-[8px] font-[600] text-[#4D4D4D]"
                     >
-                      💛 {tag}
+                      💰 {tag}
                     </span>
                   ))}
                 </div>
