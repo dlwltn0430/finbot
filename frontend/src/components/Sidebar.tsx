@@ -95,7 +95,7 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
                       className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525]"
                       onClick={() => navigateToChatDetail(chat.chat_id)}
                     >
-                      {chat.title || '새로운 대화'}
+                      {chat.title || '제목 없음'}
                     </li>
                   ))}
                 </ul>
