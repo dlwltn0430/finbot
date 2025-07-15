@@ -4,7 +4,7 @@ import policyIcon from '@/assets/sidebar/policy.svg';
 import prevIcon from '@/assets/sidebar/prev.svg';
 import { useChatListStore } from '@/stores/chatListStore';
 import { ChatSidebarItem } from '@/utils/chatStorage';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -51,7 +51,9 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
       {/* 접힌 상태 */}
       <div className="fixed left-0 top-0 z-30 flex h-screen w-[76px] flex-col items-center justify-between border-r border-gray2 bg-[#FBFBFB] pb-[44px] pt-[36px]">
         <div className="flex h-full flex-col items-center">
-          <img src={logo} alt="logo" className="w-[52px]" />
+          <Link to="/">
+            <img src={logo} alt="logo" className="w-[52px]" />
+          </Link>
           <div
             className="mt-[44px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
             onClick={toggleSidebar}
