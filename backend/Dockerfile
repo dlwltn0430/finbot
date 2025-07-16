@@ -1,4 +1,4 @@
-# FROM python:3.12.3 AS build
+#FROM python:3.12.3 AS build
 FROM ghcr.io/astral-sh/uv:python3.12-alpine AS build
 
 WORKDIR /app

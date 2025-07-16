@@ -8,6 +8,8 @@ class ProductOptionDTO(BaseModel):
 
 
 class ProductInfoDTO(BaseModel):
+    name: str
+
     product_type: Literal["saving", "deposit", "card", "insurance"]
     description: str
     institution: str

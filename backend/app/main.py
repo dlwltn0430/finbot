@@ -3,11 +3,17 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.authorization import JWTAuthMiddleware
+from app.db import init_db
 from common.database import init_mongodb_client
 from fastapi.security.api_key import APIKeyHeader
 
 from app.api.v1 import router as v1_router
 
+from common.database import init_mongodb_client
+from fastapi.security.api_key import APIKeyHeader
+
+
+from app.api.v1 import router as v1_router
 
 def create_app(lifespan):
     """FastAPI 인스턴스 생성 및 초기화"""
@@ -26,6 +32,8 @@ def create_app(lifespan):
     )
 
     app.add_middleware(JWTAuthMiddleware)
+
+    init_db()
 
     return app
 
