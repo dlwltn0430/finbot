@@ -70,8 +70,10 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                   ))}
                 </div>
 
-                <div className="rounded-[8px] bg-[#F3F6F8] px-[12px] py-[20px] text-[16px] font-[400] leading-[24px] text-[#242525]">
-                  <ReactMarkdown>{product.details || ''}</ReactMarkdown>
+                <div className="rounded-[8px] bg-[#F3F6F8] px-[24px] py-[20px] text-[16px] font-[400] leading-[24px] text-[#242525] h-[220px]">
+                  <div className="h-full max-h-full scrollbar-hide [&::-webkit-scrollbar]:[width:8px] [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar-thumb]:[bg-none] overflow-y-auto">
+                    <ReactMarkdown>{product.details || ''}</ReactMarkdown>
+                  </div>
 
                   {/* <p className="font-[700]">저축금액</p>
                   <p>
