@@ -9,20 +9,39 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Product } from '@/api/chat';
 
 import leftArrow from '@/assets/chat/left-arrow.svg';
+import leftArrowHover from '@/assets/chat/left-arrow-hover.svg';
 import rightArrow from '@/assets/chat/right-arrow.svg';
+import rightArrowHover from '@/assets/chat/right-arrow-hover.svg';
+import { useState } from 'react';
 
 interface ProductProps {
   products: Product[];
 }
 
 export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
+  const [hoveredItem, setHoveredItem] = useState<'left' | 'right' | null>(null);
+
   return (
     <div className="relative mx-auto mt-6 w-[800px]">
-      <button className="custom-prev left-0px absolute top-1/2 z-10 -translate-y-1/2">
-        <img src={leftArrow} alt="이전" />
+      <button
+        className="custom-prev left-0px absolute top-1/2 z-10 -translate-y-1/2"
+        onMouseEnter={() => setHoveredItem('left')}
+        onMouseLeave={() => setHoveredItem(null)}
+      >
+        <img
+          src={hoveredItem === 'left' ? leftArrowHover : leftArrow}
+          alt="이전"
+        />
       </button>
-      <button className="custom-next absolute right-0 top-1/2 z-10 -translate-y-1/2">
-        <img src={rightArrow} alt="다음" />
+      <button
+        className="custom-next absolute right-0 top-1/2 z-10 -translate-y-1/2"
+        onMouseEnter={() => setHoveredItem('right')}
+        onMouseLeave={() => setHoveredItem(null)}
+      >
+        <img
+          src={hoveredItem === 'right' ? rightArrowHover : rightArrow}
+          alt="다음"
+        />
       </button>
 
       <div className="mx-auto w-[688px]">
