@@ -1,10 +1,14 @@
 import { ChatListItem } from '@/api/chat';
 import logo from '@/assets/sidebar/logo.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
+import newChatHover from '@/assets/sidebar/new-chat-hover.svg';
 import policyIcon from '@/assets/sidebar/policy.svg';
+import policyIconHover from '@/assets/sidebar/policy-hover.svg';
 import prevIcon from '@/assets/sidebar/prev.svg';
+import prevIconHover from '@/assets/sidebar/prev-hover.svg';
 import { useChatListStore } from '@/stores/chatListStore';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -53,6 +57,7 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
     );
 
   const navigate = useNavigate();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const navigateToChatDetail = (chatId: string) => {
     navigate(`/chat/${chatId}`);
@@ -69,23 +74,40 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
           <div
             className="mt-[44px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
             onClick={toggleSidebar}
+            onMouseEnter={() => setHoveredItem('prev')}
+            onMouseLeave={() => setHoveredItem(null)}
           >
-            <img src={prevIcon} alt="이전 기록" className="w-[40px]" />
+            <img
+              src={hoveredItem === 'prev' ? prevIconHover : prevIcon}
+              alt="이전 기록"
+              className="w-[40px]"
+            />
             <span>이전 기록</span>
           </div>
-          <div className="mt-[36px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5">
-            <img src={policyIcon} alt="정책" className="w-[40px]" />
+          <div
+            className="mt-[36px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
+            onMouseEnter={() => setHoveredItem('policy')}
+            onMouseLeave={() => setHoveredItem(null)}
+          >
+            <img
+              src={hoveredItem === 'policy' ? policyIconHover : policyIcon}
+              alt="정책"
+              className="w-[40px]"
+            />
             <span>정책</span>
           </div>
         </div>
 
         <button
-          onClick={() => {
-            // setMessages([]);
-            navigate('/');
-          }}
+          onClick={() => navigate('/')}
+          onMouseEnter={() => setHoveredItem('new')}
+          onMouseLeave={() => setHoveredItem(null)}
         >
-          <img src={newChat} alt="new" className="w-[40px]" />
+          <img
+            src={hoveredItem === 'new' ? newChatHover : newChat}
+            alt="new"
+            className="w-[40px]"
+          />
         </button>
       </div>
 
@@ -106,7 +128,7 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
                   {chats.map((chat) => (
                     <li
                       key={chat.chat_id}
-                      className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525]"
+                      className="mb-1 cursor-pointer truncate py-[8px] text-[14px] font-[400] text-[#242525] hover:font-[600]"
                       onClick={() => navigateToChatDetail(chat.chat_id)}
                     >
                       {chat.title || '제목 없음'}
