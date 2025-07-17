@@ -17,7 +17,7 @@ export const MessageItem = ({ chatMessage }: MessageItemProps) => {
   return (
     <div
       className={`mb-[52px] w-fit rounded-[32px] font-[500] text-black ${
-        isUser ? 'ml-auto bg-[#FAF8F6] px-[20px] py-[12px]' : 'mr-auto'
+        isUser ? 'ml-auto max-w-[70%] bg-[#FAF8F6] px-[20px] py-[12px]' : 'mr-auto'
       }`}
     >
       {/* 사용자 메시지 */}
