@@ -11,8 +11,8 @@ interface MessageItemProps {
 export const MessageItem = ({ chatMessage }: MessageItemProps) => {
   const { message: textContent, products } = chatMessage.content || {};
   const isUser = chatMessage.role === 'user';
-  const isPending =
-    !isUser && !products && textContent?.endsWith('하고 있습니다.');
+  const isPending = 
+    !isUser && !products && textContent?.endsWith('니다.');
 
   return (
     <div
