@@ -16,6 +16,7 @@ import sh from '@/assets/bank/sh.svg';
 import shinhan from '@/assets/bank/shinhan.svg';
 import toss from '@/assets/bank/toss.svg';
 import woori from '@/assets/bank/woori.svg';
+import imbank from '@/assets/bank/imbank.svg';
 
 export const institutionImages: Record<string, string> = {
   default: kb,
@@ -35,6 +36,8 @@ export const institutionImages: Record<string, string> = {
   SH수협은행: sh,
   케이뱅크: kbank,
   광주은행: kj,
+  전북은행: kj,
   제주은행: jeju,
   우정사업본부: koreapost,
+  iM뱅크: imbank,
 };
