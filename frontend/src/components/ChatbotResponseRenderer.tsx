@@ -1,28 +1,47 @@
 import ReactMarkdown from 'react-markdown';
-
+import { institutionImages } from '@/constants/institutionImages';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ChatProduct } from '@/api/chat';
+import { Product } from '@/api/chat';
 
 import leftArrow from '@/assets/chat/left-arrow.svg';
+import leftArrowHover from '@/assets/chat/left-arrow-hover.svg';
 import rightArrow from '@/assets/chat/right-arrow.svg';
+import rightArrowHover from '@/assets/chat/right-arrow-hover.svg';
+import { useState } from 'react';
 
 interface ProductProps {
-  products: ChatProduct[];
+  products: Product[];
 }
 
 export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
+  const [hoveredItem, setHoveredItem] = useState<'left' | 'right' | null>(null);
+
   return (
     <div className="relative mx-auto mt-6 w-[800px]">
-      <button className="custom-prev left-0px absolute top-1/2 z-10 -translate-y-1/2">
-        <img src={leftArrow} alt="이전" />
+      <button
+        className="custom-prev left-0px absolute top-1/2 z-10 -translate-y-1/2"
+        onMouseEnter={() => setHoveredItem('left')}
+        onMouseLeave={() => setHoveredItem(null)}
+      >
+        <img
+          src={hoveredItem === 'left' ? leftArrowHover : leftArrow}
+          alt="이전"
+        />
       </button>
-      <button className="custom-next absolute right-0 top-1/2 z-10 -translate-y-1/2">
-        <img src={rightArrow} alt="다음" />
+      <button
+        className="custom-next absolute right-0 top-1/2 z-10 -translate-y-1/2"
+        onMouseEnter={() => setHoveredItem('right')}
+        onMouseLeave={() => setHoveredItem(null)}
+      >
+        <img
+          src={hoveredItem === 'right' ? rightArrowHover : rightArrow}
+          alt="다음"
+        />
       </button>
 
       <div className="mx-auto w-[688px]">
@@ -46,7 +65,15 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                   {product.description}
                 </p>
                 <div className="flex items-center gap-[4px] text-[32px] font-[600] text-[#242525]">
-                  {product.product_type}
+                  <img
+                    src={
+                      product.institution
+                        ? institutionImages[product.institution]
+                        : institutionImages['default']
+                    }
+                    className="h-[40px] w-[40px]"
+                  />
+                  {product.name}
                 </div>
                 <p className="mb-[24px] mt-[4px] text-[16px] font-[500] text-[#515354]">
                   {product.institution}
@@ -62,8 +89,10 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                   ))}
                 </div>
 
-                <div className="rounded-[8px] bg-[#F3F6F8] px-[12px] py-[20px] text-[16px] font-[400] leading-[24px] text-[#242525]">
-                  <ReactMarkdown>{product.details || ''}</ReactMarkdown>
+                <div className="rounded-[8px] bg-[#F3F6F8] px-[24px] py-[20px] text-[16px] font-[400] leading-[24px] text-[#242525] h-[220px]">
+                  <div className="prose h-full max-h-full scrollbar-hide [&::-webkit-scrollbar]:[width:8px] [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar-thumb]:[bg-none] overflow-y-auto">
+                    <ReactMarkdown>{product.details || ''}</ReactMarkdown>
+                  </div>
 
                   {/* <p className="font-[700]">저축금액</p>
                   <p>
@@ -80,7 +109,7 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                       key={i}
                       className="rounded-[24px] border border-main bg-[#FCFCFC] px-[12px] py-[8px] font-[600] text-[#4D4D4D]"
                     >
-                      💛 {tag}
+                      💰 {tag}
                     </span>
                   ))}
                 </div>
@@ -91,18 +120,6 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
           <div className="custom-pagination mt-[32px] flex justify-center gap-[8px]" />
         </Swiper>
       </div>
-
-      {/* <div className="mx-auto mt-[40px] w-[720px] text-[16px] font-[400] leading-[24px] text-[#242525]">
-        여러 조건을 고려하였을 때, KB장병내일준비적금을 가장 추천드립니다.{' '}
-        <br />
-        이유 1. 업계 최고 수준의 우대금리 제공 <br />
-        이유 2. 비대면 가입 전 과정 지원 <br />
-        🎯 당신에게 특히 추천하는 이유 <br />
-        빠르게 목돈을 마련하고 싶은 당신을 위해, 높은 금리의 상품을 우선적으로
-        고려했습니다. <br />
-        GOP 부대 특성상 외출이 제한적일 수 있으므로 비대면 가입 여부 또한
-        중요하게 판단했습니다.
-      </div> */}
     </div>
   );
 };

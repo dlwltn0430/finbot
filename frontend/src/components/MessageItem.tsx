@@ -1,28 +1,23 @@
-import { ChatContent } from '@/api/chat';
+import { ChatDetailItem } from '@/api/chat';
 import ReactMarkdown from 'react-markdown';
 
 import { ChatbotResponseRenderer } from './ChatbotResponseRenderer';
 import { PendingTaskLoader } from './PendingTaskLoader';
 
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: ChatContent;
-}
-
 interface MessageItemProps {
-  chatMessage: ChatMessage;
+  chatMessage: ChatDetailItem;
 }
 
 export const MessageItem = ({ chatMessage }: MessageItemProps) => {
   const { message: textContent, products } = chatMessage.content || {};
   const isUser = chatMessage.role === 'user';
-  const isPending =
-    !isUser && !products && textContent?.endsWith('하고 있습니다.');
+  const isPending = 
+    !isUser && !products && textContent?.endsWith('니다.');
 
   return (
     <div
       className={`mb-[52px] w-fit rounded-[32px] font-[500] text-black ${
-        isUser ? 'ml-auto bg-[#FAF8F6] px-[20px] py-[12px]' : 'mr-auto'
+        isUser ? 'ml-auto max-w-[70%] bg-[#FAF8F6] px-[20px] py-[12px]' : 'mr-auto'
       }`}
     >
       {/* 사용자 메시지 */}
@@ -41,7 +36,7 @@ export const MessageItem = ({ chatMessage }: MessageItemProps) => {
       {/* 챗봇 메시지 - 추천 이유 */}
       {!isUser && textContent && !isPending && (
         <div className="relative mx-auto mt-6 w-[800px]">
-          <div className="mx-auto mt-[40px] w-[720px] text-[16px] font-[400] leading-[24px] text-[#242525]">
+          <div className="prose mx-auto mt-[40px] w-[720px] text-[16px] font-[400] leading-[24px] text-[#242525]">
             <ReactMarkdown>{textContent}</ReactMarkdown>
           </div>
         </div>
