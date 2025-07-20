@@ -53,7 +53,7 @@ export const ChatInput = ({
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="궁금한 내용을 입력해주세요"
-        className="max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[24px] border border-[gray2] bg-white p-6 text-[20px] font-[500] text-black placeholder-gray3 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+        className="max-h-[220px] min-h-[120px] w-full resize-none overflow-y-auto rounded-[24px] border border-[gray2] bg-white p-6 pr-16 text-[18px] font-[500] text-black placeholder-gray3 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none [&::-webkit-scrollbar]:[width:8px] [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar-thumb]:[bg-none]"
         disabled={isStreaming}
       />
 
