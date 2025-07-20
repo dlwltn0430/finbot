@@ -69,7 +69,7 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
       <div className="fixed left-0 top-0 z-30 flex h-screen w-[76px] flex-col items-center justify-between border-r border-gray2 bg-[#FBFBFB] pb-[44px] pt-[36px]">
         <div className="flex h-full flex-col items-center">
           <Link to="/">
-            <img src={logo} alt="logo" className="w-[52px]" />
+            <img src={logo} alt="logo" className="w-[40px]" />
           </Link>
           <div
             className="mt-[44px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
@@ -80,21 +80,21 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
             <img
               src={hoveredItem === 'prev' ? prevIconHover : prevIcon}
               alt="이전 기록"
-              className="w-[40px]"
+              className="w-[36px]"
             />
-            <span>이전 기록</span>
+            <span className="text-[14px]">대화 내역</span>
           </div>
           <div
-            className="mt-[36px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
+            className="mt-[28px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
             onMouseEnter={() => setHoveredItem('policy')}
             onMouseLeave={() => setHoveredItem(null)}
           >
             <img
               src={hoveredItem === 'policy' ? policyIconHover : policyIcon}
               alt="정책"
-              className="w-[40px]"
+              className="w-[36px]"
             />
-            <span>정책</span>
+            <span className="text-[14px]">정책</span>
           </div>
         </div>
 

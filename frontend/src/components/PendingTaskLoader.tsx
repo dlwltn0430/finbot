@@ -13,14 +13,14 @@ export const PendingTaskLoader = ({ pendingMessage }: PendingProps) => {
   const extraCount = Math.max((products?.length ?? 0) - 3, 0);
 
   return (
-    <div className="flex flex-col gap-[12px]">
-      <div className="flex items-center gap-[8px]">
+    <div className="flex gap-[12px]">
+      <div className="flex items-center gap-[12px]">
         <img
           src={spinner}
           alt="pending"
           className="h-[24px] w-[24px] animate-spin"
         />
-        <span className="text-[16px] font-[500] text-gray6">
+        <span className="text-[16px] font-[400] text-gray6">
           {pendingMessage}
         </span>
       </div>

@@ -60,38 +60,45 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
         >
           {products.map((product, index) => (
             <SwiperSlide key={index}>
-              <div className="rounded-[12px] border border-[#EFEFEF] bg-white px-[32px] py-[36px]">
-                <p className="mb-[16px] font-[600] text-gray5">
+              <div className="rounded-[12px] border border-[#EFEFEF] bg-white px-[32px] py-[36px] h-fit">
+                <p className="mb-[8px] font-[600] text-gray5 text-[16px]">
                   {product.description}
                 </p>
-                <div className="flex items-center gap-[4px] text-[32px] font-[600] text-[#242525]">
+                <div className="flex items-center gap-[12px] text-[32px] font-[700] text-[#242525]">
                   <img
                     src={
                       product.institution
                         ? institutionImages[product.institution]
                         : institutionImages['default']
                     }
-                    className="h-[40px] w-[40px]"
+                    className="h-[36px] w-[36px]"
                   />
                   {product.name}
                 </div>
-                <p className="mb-[24px] mt-[4px] text-[16px] font-[500] text-[#515354]">
+                <p className="mb-[16px] mt-[8px] text-[12px] font-[500] text-[#515354]">
                   {product.institution}
                 </p>
-                <div className="mb-[12px] flex gap-[12px]">
+                <div className="mb-[16px] flex gap-[16px]">
                   {product.options?.map((opt, i) => (
                     <div key={i} className="flex items-center font-[600]">
-                      <span className="mr-1 text-[12px] text-[#B2B4B7]">
+                      <span className="mr-2 text-[12px] text-[#B2B4B7]">
                         {opt.category}
                       </span>
-                      <span className="text-[24px] text-main">{opt.value}</span>
+                      <span className="text-[24px] font-[600] text-main">{opt.value}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="rounded-[8px] bg-[#F3F6F8] px-[24px] py-[20px] text-[16px] font-[400] leading-[24px] text-[#242525] h-[220px]">
-                  <div className="prose h-full max-h-full scrollbar-hide [&::-webkit-scrollbar]:[width:8px] [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar-thumb]:[bg-none] overflow-y-auto">
-                    <ReactMarkdown>{product.details || ''}</ReactMarkdown>
+                <div className="rounded-[8px] bg-[#F3F6F8] px-[16px] py-[16px] text-[16px] font-[400] leading-[24px] text-[#242525] h-[196px]">
+                  <div className="prose h-full max-h-full min-w-full scrollbar-hide [&::-webkit-scrollbar]:[width:8px] [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar-thumb]:[bg-none] overflow-y-auto">
+                    <ReactMarkdown components={{
+                      li: (props) => (
+                        <li className='mt-[2px] ml-[-4px] mb-[0]' {...props} />
+                      ),
+                      ul: (props) => (
+                        <ul className='mt-[0px] mb-[0]' {...props} />
+                      )
+                    }}>{product.details || ''}</ReactMarkdown>
                   </div>
 
                   {/* <p className="font-[700]">저축금액</p>
@@ -103,16 +110,18 @@ export const ChatbotResponseRenderer = ({ products }: ProductProps) => {
                     저축한도는 최고 30만원까지 설정 및 입금 가능
                   </p> */}
                 </div>
-                <div className="mt-[24px] flex gap-[8px]">
-                  {product.tags?.map((tag: string, i: number) => (
-                    <span
-                      key={i}
-                      className="rounded-[24px] border border-main bg-[#FCFCFC] px-[12px] py-[8px] font-[600] text-[#4D4D4D]"
-                    >
-                      💰 {tag}
-                    </span>
-                  ))}
-                </div>
+                {(product.tags?.length ?? 0) > 0 && 
+                  <div className="mt-[24px] flex gap-[8px]">
+                    {product.tags?.map((tag: string, i: number) => (
+                      <span
+                        key={i}
+                        className="rounded-[24px] border border-main bg-[#FCFCFC] px-[12px] py-[8px] font-[600] text-[#4D4D4D]"
+                      >
+                        💰 {tag}
+                      </span>
+                    ))}
+                  </div>
+                }
               </div>
             </SwiperSlide>
           ))}

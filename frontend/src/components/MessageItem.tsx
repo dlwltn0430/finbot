@@ -35,8 +35,8 @@ export const MessageItem = ({ chatMessage }: MessageItemProps) => {
 
       {/* 챗봇 메시지 - 추천 이유 */}
       {!isUser && textContent && !isPending && (
-        <div className="relative mx-auto mt-6 w-[800px]">
-          <div className="prose mx-auto mt-[40px] w-[720px] text-[16px] font-[400] leading-[24px] text-[#242525]">
+        <div className="relative justify-center flex mt-6 w-[800px]">
+          <div className="prose px-[60px] mt-[40px] min-w-full text-[16px] font-[400] leading-[24px] text-[#242525]">
             <ReactMarkdown>{textContent}</ReactMarkdown>
           </div>
         </div>
