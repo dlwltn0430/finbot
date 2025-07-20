@@ -53,11 +53,11 @@ export const HomePage = () => {
   }, [messages]);
 
   return (
-    <div className="relative flex h-screen bg-white overflow-hidden">
+    <div className="relative flex h-screen bg-white overflow-hidden font-['Pretendard']">
       <div className="fixed right-[60px] top-[36px] z-50 flex items-center gap-[8px]">
         <div className="h-8 w-8 rounded-full bg-[#D9D9D9]" />
         <span className="text-[16px] font-[700] text-[#333534]">
-          이용자 이름
+          금쪽이
         </span>
       </div>
 
