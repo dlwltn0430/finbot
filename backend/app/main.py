@@ -3,7 +3,6 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_upstage import ChatUpstage
 
-from app.authorization import JWTAuthMiddleware
 from app.db import init_db
 from common.database import init_mongodb_client
 from fastapi.security.api_key import APIKeyHeader
@@ -32,8 +31,6 @@ def create_app(lifespan):
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    app.add_middleware(JWTAuthMiddleware)
 
     init_db()
 
