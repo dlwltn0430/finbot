@@ -63,12 +63,11 @@ async def lifespan(app: FastAPI):
 
 app = create_app(lifespan)
 
-token_service = TokenService(app.state.db)
-
 
 @app.middleware("http")
 async def verify_token_middleware(req: Request, call_next):
     """토큰 인증 미들웨어"""
+    token_service = TokenService(app.state.database)
 
     excluded_paths = [
         "/docs",
