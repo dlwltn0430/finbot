@@ -1,3 +1,4 @@
+import asyncio
 from typing import Any, Dict, Optional
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import datetime, timedelta, timezone
@@ -8,6 +9,7 @@ from dotenv import load_dotenv
 
 import os
 
+from common.database import init_mongodb_client
 from domains.user.models import Token
 
 load_dotenv()
@@ -73,6 +75,7 @@ class TokenService:
         except jwt.PyJWTError:
             raise InvalidTokenError("Invalid token")
 
+    # TODO: Refresh Token Rotation 방식 적용 필요
     async def refresh_access_token(self, refresh_token: str) -> str:
         """
         리프레시 토큰으로 새로운 액세스 토큰 발급하고 DB 정보 갱신.
@@ -103,3 +106,15 @@ class TokenService:
         await self.crud.upsert_tokens({"user_id": user_id, **update_data})
 
         return new_at
+
+
+async def run(user_id: str):
+    client, db = init_mongodb_client()
+    token_service = TokenService(db)
+    tokens = await token_service.issue_new_token_pair(user_id)
+    print(tokens)
+
+
+if __name__ == "__main__":
+    temp = "e954ff6a-850a-4fab-a1e1-a7338876a275"
+    asyncio.run(run(temp))
