@@ -43,15 +43,14 @@ async def kakao_redirection(req: Request,
 
     redirect_url = "/"
 
-    if social_account:
-        user_id = social_account.user_id
-
-    else:
+    if not social_account:
+        # 소셜 계정이 존재하지 않는 경우
         new_user = await user_repo.create_user(
-            User(**{
-                "email": kakao_user_info["email"],
-                "nickname": kakao_user_info["nickname"],
-            }))
+            User(
+                email=kakao_user_info["email"],
+                nickname=kakao_user_info["nickname"],
+                profile_image_url=kakao_user_info["nickname"],
+            ))
 
         user_id = new_user.id
 
@@ -62,8 +61,17 @@ async def kakao_redirection(req: Request,
 
         redirect_url = "/signup/details"
 
-    tokens = await token_service.issue_new_token_pair(user_id)
+    else:
+        if social_account.temp:
+            # 소셜 계정이 존재하지만 임시 계정인 경우
+            user_id = social_account.user_id
+            redirect_url = "/signup/details"
 
+        else:
+            # 가입된 소셜 계정이 존재하는 경우
+            user_id = social_account.user_id
+
+    tokens = await token_service.issue_new_token_pair(user_id)
     res = RedirectResponse(url=redirect_url, status_code=302)
 
     res.set_cookie(key="access_token",
