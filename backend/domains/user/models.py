@@ -23,7 +23,7 @@ class User(BaseModel):
 
     profile_image_url: Optional[str] = None
 
-    model_config = ConfigDict(populate_by_name=True)
+    #model_config = ConfigDict(populate_by_name=True)
 
 
 class SocialAccount(BaseModel):
@@ -41,7 +41,9 @@ class SocialAccount(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    model_config = ConfigDict(populate_by_name=True)
+    temp: bool = True  # 임시 계정 여부
+
+    #model_config = ConfigDict(populate_by_name=True)
 
 
 class Token(BaseModel):
@@ -54,4 +56,4 @@ class Token(BaseModel):
     access_token_expires_at: datetime
     refresh_token_expires_at: datetime
 
-    model_config = ConfigDict(populate_by_name=True)
+    #model_config = ConfigDict(populate_by_name=True)
