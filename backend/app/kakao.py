@@ -40,12 +40,13 @@ class KakaoTokenResponse(BaseModel):
 
 class KakaoAuth:
 
-    def __init__(self,
-                 client_secret: Optional[str] = None,
-                 client_id: str = KAKAO_REST_API_KEY,
-                 scopes: Optional[List[str]] = BASE_SCOPES,
-                 name: str = "kakao",
-                 redirect_uri: str = ""):
+    def __init__(
+            self,
+            client_secret: Optional[str] = None,
+            client_id: str = KAKAO_REST_API_KEY,
+            scopes: Optional[List[str]] = BASE_SCOPES,
+            name: str = "kakao",
+            redirect_uri: str = "http://localhost:8899/api/v1/auth/kakao/callback"):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.client_secret = client_secret
