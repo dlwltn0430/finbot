@@ -7,6 +7,7 @@ import {
 import { HomePage } from '@/pages/Home';
 
 import { RouterPath } from './path';
+import { LoginPage } from '@/pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: RouterPath.CHAT_DETAIL,
     element: <HomePage />,
+  },
+  {
+    path: RouterPath.LOGIN,
+    element: <LoginPage />,
   },
   {
     path: RouterPath.NOT_FOUND,
