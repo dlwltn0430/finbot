@@ -4,6 +4,7 @@ from typing import Optional, Dict, Any
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pymongo.results import DeleteResult
 
+from common.database import init_mongodb_client
 from domains.user.models import SocialProviders, SocialAccount, User
 
 
@@ -21,8 +22,15 @@ class SocialRepository:
 
         return SocialAccount.model_validate(social_raw) if social_raw else None
 
+    async def get_by_user_id(self, user_id: str):
+        social_raw = await self.collection.find_one({
+            "user_id": user_id,
+        })
+
+        return SocialAccount.model_validate(social_raw) if social_raw else None
+
     async def create(self, social: SocialAccount) -> SocialAccount:
-        await self.collection.insert_one(social)
+        await self.collection.insert_one(social.model_dump(by_alias=True))
         return social
 
 
@@ -32,7 +40,7 @@ class UserRepository:
         self.collection = db.get_collection("users")
 
     async def create_user(self, user: User) -> User:
-        await self.collection.insert_one(user)
+        await self.collection.insert_one(user.model_dump(by_alias=True))
         return user
 
     async def get_user_by_id(self, user_id: str) -> Optional[User]:
@@ -64,3 +72,24 @@ class UserRepository:
 
         result: DeleteResult = await self.collection.delete_one({"_id": user_id})
         return result.deleted_count > 0
+
+
+async def run():
+    client, db = init_mongodb_client()
+    user_repo = UserRepository(db)
+    social_repo = SocialRepository(db)
+
+    user = User(email="example@gmail.com", nickname="myeolinmalchi")
+    user = await user_repo.create_user(user)
+
+    social = SocialAccount(user_id=user.id, provider="kakao", provider_user_id="temp")
+    social = await social_repo.create(social)
+
+    print(f"user_id: {user.id}")
+    print(f"social_id: {social.id}")
+
+
+import asyncio
+
+if __name__ == "__main__":
+    asyncio.run(run())
