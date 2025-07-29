@@ -1,19 +1,21 @@
-import { useUserInfoStore } from '@/stores/userStore';
-import Header from './Header';
-import { Outlet, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
-const Layout = () => {
+import { Outlet, useLocation } from 'react-router-dom';
 
-  const { loadUserInfo } = useUserInfoStore()
-  const { pathname } = useLocation()
+import { useUserInfoStore } from '@/stores/userStore';
+
+import Header from './Header';
+
+const Layout = () => {
+  const { loadUserInfo } = useUserInfoStore();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    loadUserInfo()
-  }, [pathname])
+    loadUserInfo();
+  }, [pathname]);
 
   return (
-    <div className="relative flex h-screen bg-white overflow-hidden">
+    <div className="relative flex h-screen overflow-hidden bg-white">
       <Header />
       <Outlet />
     </div>

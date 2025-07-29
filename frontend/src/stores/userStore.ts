@@ -1,5 +1,6 @@
-import { fetchInstance } from '@/api/fetchInstance';
 import { create } from 'zustand';
+
+import { fetchInstance } from '@/api/fetchInstance';
 
 type UserInfo = {
   name: string;
@@ -8,13 +9,13 @@ type UserInfo = {
   nickname?: string;
   profile_image_url?: string;
 
-  created_at: Date
-  updated_at: Date
+  created_at: Date;
+  updated_at: Date;
 };
 
 interface UserInfoState {
   userInfo: UserInfo | null;
-  isPending: boolean
+  isPending: boolean;
 
   loadUserInfo: () => Promise<void>;
   logout: () => Promise<boolean>;
@@ -25,24 +26,27 @@ export const useUserInfoStore = create<UserInfoState>((set) => ({
   isPending: true,
 
   loadUserInfo: async () => {
-    set((prev) => ({ ...prev, isPending: true }))
-    fetchInstance.get("/api/v1/users/me").then(res => {
-      // @ts-expect-error 타입 변환 안돼서 임시 처리
-      set((prev) => ({ ...prev, userInfo: res, isPending: false }));
-    }).catch(e => {
-      console.log(e)
-      set((prev) => ({ ...prev, userInfo: null, isPending: false }));
-    })
+    set((prev) => ({ ...prev, isPending: true }));
+    fetchInstance
+      .get('/api/v1/users/me')
+      .then((res) => {
+        // @ts-expect-error 타입 변환 안돼서 임시 처리
+        set((prev) => ({ ...prev, userInfo: res, isPending: false }));
+      })
+      .catch((e) => {
+        console.log(e);
+        set((prev) => ({ ...prev, userInfo: null, isPending: false }));
+      });
   },
 
   // true: 로그아웃 성공
   // false: 로그아웃 실패
   logout: async () => {
-    const res = await fetchInstance.post("/api/v1/auth/logout")
+    const res = await fetchInstance.post('/api/v1/auth/logout');
     if (res.status === 200) {
       set((prev) => ({ ...prev, userInfo: null }));
-      return true
+      return true;
     }
-    return false
-  }
+    return false;
+  },
 }));

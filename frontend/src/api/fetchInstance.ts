@@ -26,7 +26,7 @@ fetchInstance.interceptors.request.use(
 
 fetchInstance.interceptors.response.use(
   (response) => {
-    return {...response.data, status: response.status};
+    return { ...response.data, status: response.status };
   },
   async (error: AxiosError) => {
     console.error('에러:', error);
@@ -40,7 +40,6 @@ fetchInstance.interceptors.response.use(
       originalRequest._retry = true;
       try {
         //await fetchInstance.post('/api/v1/auth/token/refresh', {});
-
         //return fetchInstance(originalRequest);
       } catch (refreshError) {
         console.error('토큰 재발급 실패:', refreshError);

@@ -1,14 +1,18 @@
-import { ChatListItem } from '@/api/chat';
-import logo from '@/assets/sidebar/logo.svg';
-import newChat from '@/assets/sidebar/new-chat.svg';
-import newChatHover from '@/assets/sidebar/new-chat-hover.svg';
-import policyIcon from '@/assets/sidebar/policy.svg';
-import policyIconHover from '@/assets/sidebar/policy-hover.svg';
-import prevIcon from '@/assets/sidebar/prev.svg';
-import prevIconHover from '@/assets/sidebar/prev-hover.svg';
-import { useChatListStore } from '@/stores/chatListStore';
-import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useChatListStore } from '@/stores/chatListStore';
+
+import { ChatListItem } from '@/api/chat';
+
+import logo from '@/assets/sidebar/logo.svg';
+import newChatHover from '@/assets/sidebar/new-chat-hover.svg';
+import newChat from '@/assets/sidebar/new-chat.svg';
+import policyIconHover from '@/assets/sidebar/policy-hover.svg';
+import policyIcon from '@/assets/sidebar/policy.svg';
+import prevIconHover from '@/assets/sidebar/prev-hover.svg';
+import prevIcon from '@/assets/sidebar/prev.svg';
 
 interface SidebarProps {
   isSidebarOpen: boolean;

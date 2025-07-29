@@ -4,16 +4,17 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 
-import { HomePage } from '@/pages/Home';
+import Layout from '@/layouts';
 
-import { RouterPath } from './path';
+import { HomePage } from '@/pages/Home';
 import { LoginPage } from '@/pages/Login';
 import { SignupPage } from '@/pages/Signup';
-import Layout from '@/layouts';
+
+import { RouterPath } from './path';
 
 const router = createBrowserRouter([
   {
-    element: <Layout/>,
+    element: <Layout />,
     children: [
       {
         path: RouterPath.HOME,
@@ -35,8 +36,8 @@ const router = createBrowserRouter([
         path: RouterPath.NOT_FOUND,
         element: <Navigate to={RouterPath.HOME} />,
       },
-    ]
-  }
+    ],
+  },
 ]);
 
 export const AppRouter = () => <RouterProvider router={router} />;
