@@ -1,7 +1,43 @@
+import { RouterPath } from "@/routes/path";
+import { useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export const LoginPage = () => {
 
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate()
+
+  // 액세스 토큰 발급에 사용되는 일회용 코드
+  const ticket = searchParams.get('ticket'); 
+
+  useEffect(() => {
+    if (ticket === null) {
+      return
+    }
+
+    fetch("/api/v1/auth/exchange", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ ticket })
+    }).then(res => {
+      if (res.ok) {
+        navigate("/")
+      } else {
+        alert("로그인 실패")
+        navigate("/")
+      }
+    })
+  }, [])
+
   const loginUrl = `/api/v1/auth/kakao/login`
+
+  if (ticket !== null) {
+    return <></>
+  }
+
   return (
     <div className="relative h-screen w-screen flex items-center justify-center">
       <div>
