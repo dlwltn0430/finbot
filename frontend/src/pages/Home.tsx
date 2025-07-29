@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
+
+import { useParams } from 'react-router-dom';
+
 import { useChatListStore } from '@/stores/chatListStore';
+
+import { getChatDetail } from '@/api/chat';
+
 import { useChat } from '@/hooks/useChat';
+import { useChatList } from '@/hooks/useChatList';
+
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
 import { Sidebar } from '@/components/Sidebar';
-import { useChatList } from '@/hooks/useChatList';
-import { useParams } from 'react-router-dom';
-import { getChatDetail } from '@/api/chat';
 
 export const HomePage = () => {
   const { data: chatListData } = useChatList();
@@ -53,18 +58,16 @@ export const HomePage = () => {
   }, [messages]);
 
   return (
-    <div className="relative flex h-screen bg-white overflow-hidden font-['Pretendard']">
+    <div className="flex h-screen bg-white font-['Pretendard']">
       <div className="fixed right-[60px] top-[36px] z-50 flex items-center gap-[8px]">
         <div className="h-8 w-8 rounded-full bg-[#D9D9D9]" />
-        <span className="text-[16px] font-[700] text-[#333534]">
-          금쪽이
-        </span>
+        <span className="text-[16px] font-[700] text-[#333534]">금쪽이</span>
       </div>
 
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <div
-        className={`flex flex-1 [&::-webkit-scrollbar]:[width:8px] [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar-thumb]:[bg-none] overflow-y-auto h-[calc(100vh-40px)] box-border flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative mb-[40px] pt-[100px]'}`}
+        className={`ml-[76px] flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
       >
         {messages.length === 0 && (
           <div className="mb-[24px] text-center">
@@ -75,8 +78,8 @@ export const HomePage = () => {
         )}
 
         <div
-          className={`absolute translate-x-[-50%] left-[calc(50%+76px/2)] w-full max-w-[800px] pb-[200px] min-h-fit ${
-            messages.length === 0 ? '' : 'flex-1'
+          className={`w-full max-w-[800px] ${
+            messages.length === 0 ? '' : 'flex-1 overflow-y-auto'
           }`}
         >
           {messages.map((m, i) => (
@@ -101,16 +104,17 @@ export const HomePage = () => {
                 : 'absolute bottom-0 left-0 w-full py-5'
             }`}
           >
+            {' '}
+            <ChatInput
+              input={input}
+              setInput={setInput}
+              isStreaming={isStreaming}
+              onSend={() => sendMessage(input, chatId)}
+              onCancel={cancelStreamingResponse}
+            />
           </div>
         </div>
       </div>
-        <ChatInput
-          input={input}
-          setInput={setInput}
-          isStreaming={isStreaming}
-          onSend={() => sendMessage(input, chatId)}
-          onCancel={cancelStreamingResponse}
-        />
     </div>
   );
 };
