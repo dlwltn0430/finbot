@@ -39,9 +39,9 @@ fetchInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        await fetchInstance.post('/api/v1/auth/token/refresh', {});
+        //await fetchInstance.post('/api/v1/auth/token/refresh', {});
 
-        return fetchInstance(originalRequest);
+        //return fetchInstance(originalRequest);
       } catch (refreshError) {
         console.error('토큰 재발급 실패:', refreshError);
         window.location.href = '/login';
