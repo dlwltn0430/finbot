@@ -1,22 +1,30 @@
-const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
 export const LoginPage = () => {
-  const handleLogin = () => {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    window.location.href = kakaoAuthUrl;
-  };
 
+  const loginUrl = `/api/v1/auth/kakao/login`
   return (
-    <button
-      onClick={handleLogin}
-      style={{
-        padding: '10px 20px',
-        background: '#FEE500',
-        borderRadius: '5px',
-      }}
-    >
-      카카오 로그인
-    </button>
+    <div className="relative h-screen w-screen flex items-center justify-center">
+      <div>
+        <h1 className="text-[36px] font-[600] text-center mb-[16px]">금쪽이 시작하기</h1>
+        <h2 className="text-[16px] font-[400] text-center mb-[40px] text-gray-600">
+          금융 어시스턴트 금쪽이와 함께,<br/>
+          스마트한 금융 생활을 시작해 보세요!
+        </h2>
+        <div className="flex flex-col gap-[12px]">
+          <a
+            href={loginUrl}
+            className="text-center rounded-[8px] py-[10px] px-[20px] w-[420px] h-[52px] bg-[#FEE500] font-[500] text-[18px] text-gray-800"
+          >
+            카카오로 시작하기
+          </a>
+          <Link
+            to={RouterPath.HOME}
+            className="text-center rounded-[8px] py-[10px] px-[20px] w-[420px] h-[52px] bg-gray-100 font-[500] text-[18px] text-gray-800"
+          >
+            홈으로 돌아가기
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
