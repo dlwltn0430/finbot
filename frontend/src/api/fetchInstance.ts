@@ -26,7 +26,7 @@ fetchInstance.interceptors.request.use(
 
 fetchInstance.interceptors.response.use(
   (response) => {
-    return response.data;
+    return {...response.data, status: response.status};
   },
   async (error: AxiosError) => {
     console.error('에러:', error);
