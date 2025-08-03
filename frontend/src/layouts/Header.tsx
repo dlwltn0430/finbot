@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useUserInfoStore } from '@/stores/userStore';
 
@@ -28,7 +28,13 @@ type HeaderDropDownProps = {
 };
 
 const HeaderDropDown = ({ visible }: HeaderDropDownProps) => {
-  const { logout: handleLogout } = useUserInfoStore();
+  const { logout } = useUserInfoStore();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate(0);
+  };
 
   if (!visible) {
     return <></>;
