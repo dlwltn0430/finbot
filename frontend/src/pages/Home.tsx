@@ -62,7 +62,11 @@ export const HomePage = () => {
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <div
-        className={`ml-[76px] flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
+        className={`[&::-webkit-scrollbar-thumb]:[bg-none] box-border flex h-[calc(100vh-40px)] flex-1 flex-col items-center overflow-y-auto transition-all duration-300 [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar]:[width:8px] ${
+          messages.length === 0
+            ? 'justify-center'
+            : 'relative mb-[40px] pt-[100px]'
+        }`}
       >
         {messages.length === 0 && (
           <div className="mb-[24px] text-center">
@@ -73,8 +77,8 @@ export const HomePage = () => {
         )}
 
         <div
-          className={`w-full max-w-[800px] ${
-            messages.length === 0 ? '' : 'flex-1 overflow-y-auto'
+          className={`absolute left-[calc(50%+76px/2)] z-30 min-h-fit w-full max-w-[800px] translate-x-[-50%] pb-[200px] ${
+            messages.length === 0 ? '' : 'flex-1'
           }`}
         >
           {messages.map((m, i) => (
@@ -98,17 +102,16 @@ export const HomePage = () => {
                 ? 'flex items-center justify-center'
                 : 'absolute bottom-0 left-0 w-full py-5'
             }`}
-          >
-            <ChatInput
-              input={input}
-              setInput={setInput}
-              isStreaming={isStreaming}
-              onSend={() => sendMessage(input, chatId)}
-              onCancel={cancelStreamingResponse}
-            />
-          </div>
+          ></div>
         </div>
       </div>
+      <ChatInput
+        input={input}
+        setInput={setInput}
+        isStreaming={isStreaming}
+        onSend={() => sendMessage(input, chatId)}
+        onCancel={cancelStreamingResponse}
+      />
     </>
   );
 };
