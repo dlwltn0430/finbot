@@ -49,6 +49,14 @@ const HeaderDropDown = ({ visible }: HeaderDropDownProps) => {
   );
 };
 
+const HeaderContainer = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <div className="fixed right-0 top-0 z-20 flex h-[100px] w-[calc(100vw-76px)] items-center justify-end pr-[60px] pt-[36px]">
+      {children}
+    </div>
+  );
+};
+
 const Header = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const toggleDropdown = () => setDropdownVisible(!isDropdownVisible);
@@ -62,33 +70,39 @@ const Header = () => {
     return <></>;
   }
 
+  if (userInfo === null && isPending) {
+    return <HeaderContainer />;
+  }
+
+  if (userInfo === null) {
+    return (
+      <HeaderContainer>
+        <Link
+          to="/login"
+          className="py-auto flex h-[44px] w-[100px] animate-fade-in items-center justify-center rounded-[32px] bg-[#07dfaf] text-[16px] font-[700] text-white"
+        >
+          로그인
+        </Link>
+      </HeaderContainer>
+    );
+  }
+
   return (
-    <div className="fixed right-0 top-0 flex w-[calc(100vw-76px)] items-center justify-end pr-[60px] pt-[36px]">
-      {isPending && <></>}
-      {!isPending &&
-        (userInfo === null ? (
-          <Link
-            to="/login"
-            className="py-auto flex h-[44px] w-[100px] items-center justify-center rounded-[32px] bg-[#07dfaf] text-[16px] font-[700] text-white"
-          >
-            로그인
-          </Link>
-        ) : (
-          <button
-            onClick={toggleDropdown}
-            className="relative flex items-center justify-center gap-[8px]"
-          >
-            <HeaderDropDown visible={isDropdownVisible} />
-            <img
-              src={userInfo?.profile_image_url}
-              className="h-8 w-8 rounded-full bg-gray-100"
-            />
-            <span className="text-[16px] font-[700] text-[#333534]">
-              {userInfo.name ?? userInfo.nickname}
-            </span>
-          </button>
-        ))}
-    </div>
+    <HeaderContainer>
+      <button
+        onClick={toggleDropdown}
+        className="relative flex animate-fade-in items-center justify-center gap-[8px]"
+      >
+        <HeaderDropDown visible={isDropdownVisible} />
+        <img
+          src={userInfo?.profile_image_url}
+          className="h-8 w-8 rounded-full bg-gray-100"
+        />
+        <span className="text-[16px] font-[700] text-[#333534]">
+          {userInfo.name ?? userInfo.nickname}
+        </span>
+      </button>
+    </HeaderContainer>
   );
 };
 
