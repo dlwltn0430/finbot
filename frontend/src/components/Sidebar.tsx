@@ -21,10 +21,15 @@ import { MemoryPanel } from './MemoryPanel';
 
 interface SidebarProps {
   isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
   toggleSidebar: () => void;
 }
 
-export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
+export const Sidebar = ({
+  isSidebarOpen,
+  setIsSidebarOpen,
+  toggleSidebar,
+}: SidebarProps) => {
   const chatList = useChatListStore((state) => state.chatList);
 
   const formatDateLabel = (updatedAt: string) => {
@@ -67,7 +72,7 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
 
   const navigate = useNavigate();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [isMemoryPanelOpen, setIsMemoryPanelOpen] = useState(true); //
+  const [isMemoryPanelOpen, setIsMemoryPanelOpen] = useState(false);
 
   const navigateToChatDetail = (chatId: string) => {
     navigate(`/chat/${chatId}`);
@@ -127,6 +132,10 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
             src={hoveredItem === 'setting' ? settingIconHover : settingIcon}
             alt="setting"
             className="w-[40px]"
+            onClick={() => {
+              setIsMemoryPanelOpen(true);
+              setIsSidebarOpen(false);
+            }}
           />
 
           {hoveredItem === 'setting' && (
@@ -135,7 +144,6 @@ export const Sidebar = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
                 src={memoryIcon}
                 alt="memory"
                 className="h-[20px] w-[20px]"
-                onClick={() => setIsMemoryPanelOpen(true)}
               />
               메모리 관리
             </div>
