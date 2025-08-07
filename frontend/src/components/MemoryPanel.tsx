@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 import backArrow from '@/assets/memory/back-arrow.svg';
+import trashHover from '@/assets/memory/trash-hover.svg';
 import trash from '@/assets/memory/trash.svg';
 
 interface MemoryPanelProps {
@@ -6,6 +9,8 @@ interface MemoryPanelProps {
 }
 
 export const MemoryPanel = ({ onClose }: MemoryPanelProps) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   return (
     <div className="fixed bottom-0 left-1/2 right-0 top-[108px] z-50 w-full max-w-[1112px] -translate-x-1/2 bg-white">
       <div className="mb-[28px] flex items-center">
@@ -37,10 +42,13 @@ export const MemoryPanel = ({ onClose }: MemoryPanelProps) => {
                   메모리 내용입니다. 내용은 최대 n줄까지 들어갑니다. <br />
                   메모리 내용입니다. 내용은 최대 n줄까지 들어갑니다.
                 </span>
+
                 <img
-                  src={trash}
+                  src={hoveredIndex === idx ? trashHover : trash}
                   alt="삭제"
                   className="h-[24px] w-[24px] cursor-pointer"
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                 />
               </div>
             ))}
