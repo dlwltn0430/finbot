@@ -3,6 +3,7 @@ import { useState } from 'react';
 import backArrow from '@/assets/memory/back-arrow.svg';
 import trashHover from '@/assets/memory/trash-hover.svg';
 import trash from '@/assets/memory/trash.svg';
+import { useMemoryList } from '@/hooks/useMemoryList';
 
 interface MemoryPanelProps {
   onClose: () => void;
@@ -10,6 +11,11 @@ interface MemoryPanelProps {
 
 export const MemoryPanel = ({ onClose }: MemoryPanelProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const {
+    memoryList,
+    deleteMemory,
+  } = useMemoryList()
 
   return (
     <div className="fixed bottom-0 left-1/2 right-0 top-[108px] z-50 w-full max-w-[1112px] -translate-x-1/2 bg-white">
@@ -33,7 +39,7 @@ export const MemoryPanel = ({ onClose }: MemoryPanelProps) => {
       <div className="relative max-h-[calc(100vh-120px)] rounded-[24px] border border-gray2 pb-[36px] pl-[36px] pr-[24px] pt-[36px] shadow-[0_0_12px_0_rgba(27,27,27,0.04)]">
         <div className="custom-scroll max-h-[60vh] overflow-y-auto">
           <div className="min-w-[calc(100%-8px) mr-[8px]">
-            {[...Array(10)].map((_, idx, arr) => (
+            {memoryList.map((memory, idx, arr) => (
               <div
                 key={idx}
                 className={`flex items-center justify-between ${
@@ -41,14 +47,14 @@ export const MemoryPanel = ({ onClose }: MemoryPanelProps) => {
                 } ${idx === 0 ? 'pb-[12px]' : idx === arr.length - 1 ? 'pt-[12px]' : 'py-[12px]'}`}
               >
                 <span className="text-[12px] font-[400] leading-[16px] text-black">
-                  메모리 내용입니다. 내용은 최대 n줄까지 들어갑니다. <br />
-                  메모리 내용입니다. 내용은 최대 n줄까지 들어갑니다.
+                  {memory.content}
                 </span>
 
                 <img
                   src={hoveredIndex === idx ? trashHover : trash}
                   alt="삭제"
                   className="h-[24px] w-[24px] cursor-pointer"
+                  onClick={() => deleteMemory(memory.memory_id)}
                   onMouseEnter={() => setHoveredIndex(idx)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 />
