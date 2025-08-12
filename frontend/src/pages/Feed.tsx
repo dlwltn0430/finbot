@@ -27,34 +27,35 @@ export const FeedPage = () => {
         {mock.map((p) => (
           <article
             key={p.feed_id}
-            className="group overflow-hidden rounded-[20px] border border-gray2 bg-white shadow-[0_0_4px_0_rgba(27,27,27,0.04)]"
+            className="group flex h-[436px] flex-col overflow-hidden rounded-[20px] border border-gray2 bg-white shadow-[0_0_4px_0_rgba(27,27,27,0.04)]"
           >
-            <div className="relative">
+            <div className="h-[240px]">
               <img
                 src={p.thumbnail}
                 alt={p.title}
-                className="h-[240px] w-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
 
-            <div className="space-y-[4px] p-4">
-              <h3 className="line-clamp-2 text-[20px] font-[600] leading-[28px] text-black">
-                {p.title}
-              </h3>
+            <div className="flex flex-1 flex-col p-4">
+              <div className="space-y-[4px]">
+                <h3 className="line-clamp-3 text-[20px] font-[600] leading-[28px] text-black">
+                  {p.title}
+                </h3>
+                <p className="text-gray7 line-clamp-4 text-[12px] font-[400] leading-[16px]">
+                  {p.description}
+                </p>
+              </div>
 
-              <p className="text-gray7 line-clamp-3 text-[12px] font-[400] leading-[16px]">
-                {p.description}
-              </p>
-            </div>
-
-            <div className="just flex items-center justify-end pb-4 pr-4">
-              <a
-                href={p.external_url}
-                className="inline-flex items-center gap-[4px] rounded-[32px] bg-gray6 px-[8px] py-[4px] text-[12px] font-[500] text-gray5"
-              >
-                외부링크로 바로가기
-                <img src={linkArrow} alt=">" className="h-[16px] w-[16px]" />
-              </a>
+              <div className="mt-auto flex justify-end pt-4">
+                <a
+                  href={p.external_url}
+                  className="inline-flex items-center gap-[4px] rounded-[32px] bg-gray6 px-[8px] py-[4px] text-[12px] font-[500] text-gray5"
+                >
+                  외부링크로 바로가기
+                  <img src={linkArrow} alt=">" className="h-[16px] w-[16px]" />
+                </a>
+              </div>
             </div>
           </article>
         ))}
