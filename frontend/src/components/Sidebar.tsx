@@ -139,7 +139,13 @@ export const Sidebar = ({
           />
 
           {hoveredItem === 'setting' && (
-            <div className="text-gray7 absolute bottom-1/2 left-full z-[9999] ml-[6px] flex w-[180px] translate-y-1/2 items-center justify-center gap-[8px] whitespace-nowrap rounded-[4px] border border-gray2 bg-white py-[12px] text-[16px] font-[600] shadow-[0_0_4px_rgba(27,27,27,0.04)]">
+            <div
+              className="text-gray7 absolute bottom-1/2 left-full z-[9999] ml-[6px] flex w-[180px] translate-y-1/2 items-center justify-center gap-[8px] whitespace-nowrap rounded-[4px] border border-gray2 bg-white py-[12px] text-[16px] font-[600] shadow-[0_0_4px_rgba(27,27,27,0.04)]"
+              onClick={() => {
+                setIsMemoryPanelOpen(true);
+                setIsSidebarOpen(false);
+              }}
+            >
               <img
                 src={memoryIcon}
                 alt="memory"
