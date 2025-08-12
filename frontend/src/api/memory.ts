@@ -24,7 +24,7 @@ export const getMemoryList = async (
 
 // 메모리 삭제
 export const deleteMemory = async (
-  memeoryId: string,
+  memoryId: string,
 ): Promise<boolean> => {
-  return await fetchInstance.delete(`/api/v1/users/me/memeories/${memeoryId}`);
+  return await fetchInstance.delete(`/api/v1/users/me/memories/${memoryId}`);
 };
