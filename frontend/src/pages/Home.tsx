@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useParams } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ import { useChatList } from '@/hooks/useChatList';
 
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
-import { Sidebar } from '@/components/Sidebar';
 
 export const HomePage = () => {
   const { data: chatListData } = useChatList();
@@ -46,9 +45,6 @@ export const HomePage = () => {
     }
   }, [chatId, setMessages]);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,22 +54,9 @@ export const HomePage = () => {
   }, [messages]);
 
   return (
-    <div className="flex h-screen bg-white font-['Pretendard']">
-      <div className="fixed right-[60px] top-[36px] z-50 flex items-center gap-[8px]">
-        <div className="h-8 w-8 rounded-full bg-[#D9D9D9]" />
-        <span className="text-[16px] font-[700] text-[#333534]">
-          이용자 이름
-        </span>
-      </div>
-
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-        toggleSidebar={toggleSidebar}
-      />
-
+    <div className="relative flex h-screen overflow-hidden bg-white">
       <div
-        className={`ml-[76px] flex h-screen flex-1 flex-col items-center transition-all duration-300 ${messages.length === 0 ? 'justify-center' : 'relative pb-[200px] pt-[144px]'}`}
+        className={`[&::-webkit-scrollbar-thumb]:[bg-none] box-border flex h-[calc(100vh-40px)] flex-1 flex-col items-center overflow-y-auto transition-all duration-300 [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar]:[width:8px] ${messages.length === 0 ? 'justify-center' : 'relative mb-[40px] pt-[100px]'}`}
       >
         {messages.length === 0 && (
           <div className="mb-[24px] text-center">

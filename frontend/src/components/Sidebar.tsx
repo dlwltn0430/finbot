@@ -2,12 +2,14 @@ import { useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import { RouterPath } from '@/routes/path';
 import { useChatListStore } from '@/stores/chatListStore';
 
 import { ChatListItem } from '@/api/chat';
 
 import logo from '@/assets/sidebar/logo.svg';
 import memoryIcon from '@/assets/sidebar/memory.svg';
+
 import newChatHover from '@/assets/sidebar/new-chat-hover.svg';
 import newChat from '@/assets/sidebar/new-chat.svg';
 import policyIconHover from '@/assets/sidebar/policy-hover.svg';
@@ -103,6 +105,7 @@ export const Sidebar = ({
             className="mt-[36px] flex cursor-pointer flex-col items-center font-[400] text-gray3 hover:text-gray5"
             onMouseEnter={() => setHoveredItem('policy')}
             onMouseLeave={() => setHoveredItem(null)}
+            onClick={() => navigate(RouterPath.FEED)}
           >
             <img
               src={hoveredItem === 'policy' ? policyIconHover : policyIcon}
