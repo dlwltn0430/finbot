@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { RouterPath } from '@/routes/path';
+import kakaoLoginButton from '@/assets/login/kakao-login.svg';
 
 export const LoginPage = () => {
   const [searchParams] = useSearchParams();
@@ -40,30 +40,21 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="relative flex h-screen w-screen items-center justify-center">
-      <div>
-        <h1 className="mb-[16px] text-center text-[36px] font-[600]">
-          금쪽이 시작하기
-        </h1>
-        <h2 className="mb-[40px] text-center text-[16px] font-[400] text-gray-600">
-          금융 어시스턴트 금쪽이와 함께,
-          <br />
-          스마트한 금융 생활을 시작해 보세요!
-        </h2>
-        <div className="flex flex-col gap-[12px]">
-          <a
-            href={loginUrl}
-            className="h-[52px] w-[420px] rounded-[8px] bg-[#FEE500] px-[20px] py-[10px] text-center text-[18px] font-[500] text-gray-800"
-          >
-            카카오로 시작하기
-          </a>
-          <Link
-            to={RouterPath.HOME}
-            className="h-[52px] w-[420px] rounded-[8px] bg-gray-100 px-[20px] py-[10px] text-center text-[18px] font-[500] text-gray-800"
-          >
-            홈으로 돌아가기
-          </Link>
-        </div>
+    <div className="relative flex h-screen w-screen flex-col items-center justify-center">
+      <div className="text-gray7 mb-[12px] text-center text-[40px] font-[700]">
+        로그인
+      </div>
+      <h2 className="text-center text-[24px] font-[400] text-gray5">
+        원하시는 로그인 방법을 선택하세요.
+      </h2>
+      <div className="mt-[200px] flex justify-center">
+        <a href={loginUrl}>
+          <img
+            src={kakaoLoginButton}
+            alt="카카오 로그인"
+            className="h-[90px]"
+          />
+        </a>
       </div>
     </div>
   );
