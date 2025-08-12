@@ -46,14 +46,14 @@ export const ChatInput = ({
   };
 
   return (
-    <div className="flex absolute translate-x-[-50%] left-[calc(50%+76px/2-4px)] bottom-[40px] w-[720px] h-fit">
+    <div className="relative mx-auto w-[800px]">
       <textarea
         ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="궁금한 내용을 입력해주세요"
-        className="max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[24px] border border-[gray2] bg-white p-6 text-[20px] font-[500] text-black placeholder-gray3 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none"
+        className="[&::-webkit-scrollbar-thumb]:[bg-none] max-h-[220px] min-h-[160px] w-full resize-none overflow-y-auto rounded-[24px] border border-[gray2] bg-white p-6 pr-16 text-[18px] font-[500] text-black placeholder-gray3 shadow-[0px_0px_12px_0px_rgba(98,98,98,0.04)] outline-none [&::-webkit-scrollbar-thumb]:[background-color:lightgray] [&::-webkit-scrollbar-thumb]:[border-radius:8px] [&::-webkit-scrollbar]:[width:8px]"
         disabled={isStreaming}
       />
 
