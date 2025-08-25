@@ -11,6 +11,7 @@ import { useChatList } from '@/hooks/useChatList';
 
 import { ChatInput } from '@/components/ChatInput';
 import { MessageItem } from '@/components/MessageItem';
+import { Sidebar } from '@/components/Sidebar';
 
 export const HomePage = () => {
   const { data: chatListData } = useChatList();
@@ -67,7 +68,7 @@ export const HomePage = () => {
         )}
 
         <div
-          className={`absolute left-[calc(50%+76px/2)] min-h-fit w-full max-w-[800px] translate-x-[-50%] pb-[200px] ${
+          className={`absolute left-[calc(50%+76px/2)] z-30 min-h-fit w-full max-w-[800px] translate-x-[-50%] pb-[200px] ${
             messages.length === 0 ? '' : 'flex-1'
           }`}
         >
